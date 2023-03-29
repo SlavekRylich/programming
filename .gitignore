@@ -49,5 +49,8 @@ xvlog.*
 *.backup.*
 *.debug
 
-
+## C# for visual studio 
+bin
+obj
+.vs
 unisims
