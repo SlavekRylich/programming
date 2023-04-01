@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace game_2048
 {
@@ -14,6 +16,7 @@ namespace game_2048
             private readonly int nRows;
             private readonly int nCols;
             private readonly Random random = new Random();
+            private string path = (System.IO.Directory.GetCurrentDirectory() + @"..\..\..\..\highscores.txt");
 
             public Game()
             {
@@ -23,7 +26,7 @@ namespace game_2048
                 this.Score = 0;
             }
 
-            public void Run()
+            public void Run(string namePlayer)
             {
                 bool hasUpdated = true;
                 do
@@ -33,10 +36,10 @@ namespace game_2048
                         PutNewValue();
                     }
 
-                    Display();
+                    Display(namePlayer);
 
-                    if (IsDead())
-                    {
+                if (IsDead())
+                {
                         using (new ColorOutput(ConsoleColor.Red))
                         {
                             Console.WriteLine("YOU ARE DEAD!!!");
@@ -44,7 +47,8 @@ namespace game_2048
                         }
                     }
 
-                    Console.WriteLine("Use arrow keys to move the tiles. Press Ctrl-C to exit.");
+                    Console.WriteLine("Use arrow keys to move the tiles. \nPress S to Save and Quit \nPress Ctrl-C to exit without saving game.");
+                    
                     ConsoleKeyInfo input = Console.ReadKey(true); // BLOCKING TO WAIT FOR INPUT
                     Console.WriteLine(input.Key.ToString());
 
@@ -65,16 +69,21 @@ namespace game_2048
                         case ConsoleKey.RightArrow:
                             hasUpdated = Update(Direction.Right);
                             break;
+                    case ConsoleKey.S:
+                        Console.WriteLine("Save to: \nEND GAME!");
+                        Console.ReadKey();
+                        break;
 
-                        default:
+                    default:
                             hasUpdated = false;
                             break;
                     }
                 }
                 while (true); // use CTRL-C to break out of loop
 
+                SaveToHighscoreFile(this.Score, namePlayer); // Save to *\game_2048\highscores.txt
                 Console.WriteLine("Press any key to quit...");
-                Console.Read();
+                Console.ReadKey();
             }
 
             private static ConsoleColor GetNumberColor(ulong num)
@@ -223,7 +232,7 @@ namespace game_2048
                 return true;
             }
 
-            private void Display()
+            private void Display(string namePlayer)
             {
                 Console.Clear();
                 Console.WriteLine();
@@ -241,7 +250,7 @@ namespace game_2048
                     Console.WriteLine();
                 }
 
-                Console.WriteLine("Score: {0}", this.Score);
+                Console.WriteLine("Score: {0} \t Player: {1}", this.Score, namePlayer);
                 Console.WriteLine();
             }
 
@@ -266,8 +275,30 @@ namespace game_2048
                 Board[emptySlots[iSlot].Item1, emptySlots[iSlot].Item2] = value;
             }
 
-            #region Utility Classes
-            enum Direction
+            private void SaveToHighscoreFile(ulong score, string namePlayer)
+            {
+                //string path = (System.IO.Directory.GetCurrentDirectory() + @"-highscores.txt");
+                if (!File.Exists(path))
+                {
+                    // Create a file to write to.
+                    using (StreamWriter sw = File.CreateText(path))
+                    {
+                        sw.Write("{0} {1}\n",namePlayer, score );
+                        sw.Close();
+                    }
+                }
+                else
+                {
+                    using (StreamWriter sw = File.AppendText(path))
+                    {
+                        sw.Write("{0} {1}\n", namePlayer, score);
+                        sw.Close();
+                    }
+                }
+            }
+
+        #region Utility Classes
+        enum Direction
             {
                 Up,
                 Down,
