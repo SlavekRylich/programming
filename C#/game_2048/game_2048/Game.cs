@@ -16,14 +16,15 @@ namespace game_2048
             private readonly int nRows;
             private readonly int nCols;
             private readonly Random random = new Random();
-            private string path = (System.IO.Directory.GetCurrentDirectory() + @"..\..\..\..\highscores.txt");
+            private string path;
 
-            public Game()
+            public Game(string path)
             {
                 this.Board = new ulong[4, 4];
                 this.nRows = this.Board.GetLength(0);
                 this.nCols = this.Board.GetLength(1);
                 this.Score = 0;
+                this.path=path;
             }
 
             public void Run(string namePlayer)
