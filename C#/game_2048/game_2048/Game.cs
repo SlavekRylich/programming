@@ -27,7 +27,7 @@ namespace game_2048
                 this.path=path;
             }
 
-            public void Run(string namePlayer)
+            public ulong Run(string namePlayer)
             {
                 bool hasUpdated = true;
                 do
@@ -81,10 +81,11 @@ namespace game_2048
                     }
                 }
                 while (true); // use CTRL-C to break out of loop
-
+                
                 SaveToHighscoreFile(this.Score, namePlayer); // Save to *\game_2048\highscores.txt
                 Console.WriteLine("Press any key to quit...");
                 Console.ReadKey();
+            return Score;
             }
 
             private static ConsoleColor GetNumberColor(ulong num)

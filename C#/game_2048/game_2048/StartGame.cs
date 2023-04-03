@@ -17,93 +17,52 @@ namespace game_2048
         // Constractors
         public StartGame() {
             Start();
-            //player.SetScore(game.Run());
         }
+
         // Variables
         Player player;
         Game game;
         private string path = (System.IO.Directory.GetCurrentDirectory() + @"..\..\..\..\highscores.txt");
-        private SortedDictionary<string, ulong> highscore;
+        //private SortedDictionary<string, ulong> highscore;
 
         // Properties
 
         // Methods
-        private string NewPlayerName()
+        private string NewPlayerName(HighScore highScore)
         {
             Console.Clear();
             Console.WriteLine("Nova hra");
             Console.WriteLine();
+            bool validName = false;
+            string inputName=null;
             Console.WriteLine("Zadejte jmeno:");
-            string inputName = Console.ReadLine();
-
-            if (highscore.ContainsKey(inputName))
+            while (!validName)
             {
-                //Console.Write("{0}: ", _archiv[rok].Rok);
-                //for (int i = 0; i < _archiv[rok].MesicniTeploty.Count; i++)
-                //{
-                //    Console.Write("{0:0.0}; ", _archiv[rok].MesicniTeploty[i]);
-                //}
-            }
-            else
-                Console.WriteLine("Nenalezeno");
-            Console.WriteLine("Nacitam novou hru...");
-            return inputName;
+                
+                inputName = Console.ReadLine();
 
+                if (highScore.Find(inputName))
+                {
+                    Console.WriteLine("Jmeno je obsazene");
+                    Console.WriteLine("Zadejte jmeno znovu a lepe:");
+                }
+                else
+                {
+                    validName = true;   
+                    Console.WriteLine("Nacitam novou hru...");
+                }
+            }
+            return inputName;
         }
         private void UpdateHighScores()
         {
             
         }
-    }
-    //private void PrintHighScore()
-    //{
-    //    using (HighScore highscore  = new HighScore())
-    //    {
-    //        highscore.PrintHighScore();
-    //    }
-    //}
-    private SortedDictionary<string,ulong> TouchHighScor()
-    {
-        StreamReader reader = File.OpenText(path);
-        highscore = new SortedDictionary<string, ulong>();
-        string name;
-        ulong score = 0;
-
-        string radek = null;
-        while ((radek = reader.ReadLine()) != null)
-        {
-            string[] values = new string[2];
-            values = radek.Split(' ');
-
-            name = values[0];
-            score = Convert.ToUInt32(values[1]);
-            highscore.Add(name, score);
-        }
-        reader.Close();
-        Console.Clear();
-        byte indexer = 0;
-        var sortedDict = from entry in highscore orderby entry.Value descending select entry;
-        Console.WriteLine(" --- TOP 10 Highscore --- ");     // HEAD of highscore list
-        Console.WriteLine("\tJmeno   Body ");
-        Console.WriteLine("---------------------------");
-        return sortedDict;
-    }
-        private void PrintHighScore(SortedDictionary<string, ulong> list) 
-        { 
-            foreach (KeyValuePair<string, ulong> kvp in list)
-            {
-            byte indexer = 0;
-            Console.WriteLine(indexer + 1 + ". {0, 10} {1, 6}",
-                    kvp.Key, kvp.Value);
-                if (indexer > 10)
-                    break;
-                indexer++;
-            }
-            Console.WriteLine("Press any key to return to the main menu.");
-            Console.ReadKey();
-        }
+    
+    
         public void Start()
         {
+            HighScore highScore = new HighScore(path);
             bool run = true;
             while (run)
             {
@@ -119,15 +78,15 @@ namespace game_2048
                 switch (input.KeyChar)
                 {
                     case '1':
-                        player = new Player(NewPlayerName());
+                        player = new Player(NewPlayerName(highScore));
                         
                         game = new Game(path);
-                        game.Run(player.GetName);
+                        highScore.SaveToHighscoreFile(game.Run(player.GetName), player.GetName);
                         break;
                     case '2':
                     //break;
                     case '3':
-                        PrintHighScore();
+                        highScore.PrintHighScore();
                         break;
                     case '4':
                         run = false;
