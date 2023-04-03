@@ -23,11 +23,6 @@ namespace game_2048
         Player player;
         Game game;
         private string path = (System.IO.Directory.GetCurrentDirectory() + @"..\..\..\..\highscores.txt");
-        private int bytesread;
-        private int toRead;
-        private char[] buffer;
-        private int offset;
-        private string temporary;
         private SortedDictionary<string, ulong> highscore;
 
         // Properties
@@ -62,21 +57,29 @@ namespace game_2048
                     highscore.Add(name, score);
                 }
                 reader.Close();
-            var sortedDict = from entry in highscore orderby entry.Value ascending select entry;
-            foreach (var c in sortedDict)
+            Console.Clear();
+            byte indexer = 0;
+            var sortedDict = from entry in highscore orderby entry.Value descending select entry;
+            Console.WriteLine(" --- TOP 10 Highscore --- ");     // HEAD of highscore list
+            Console.WriteLine("\tJmeno   Body ");
+            Console.WriteLine("---------------------------");
+            foreach (KeyValuePair<string, ulong> kvp in sortedDict)
             {
-                Console.WriteLine(c);
+                Console.WriteLine(indexer +1 +". {0, 10} {1, 6}",
+                    kvp.Key, kvp.Value);
+                if (indexer > 10)
+                    break;
+                indexer++;
             }
-
-
-
+            Console.WriteLine("Press any key to return to the main menu.");
+            Console.Read();
         }
         public void Start()
         {
             bool run = true;
             while (run)
             {
-
+                Console.Clear();
                 Console.WriteLine("Menu");
                 Console.WriteLine("1: New Game");
                 Console.WriteLine("2: Load Game");
@@ -84,8 +87,8 @@ namespace game_2048
                 Console.WriteLine("4: End Game");
                 Console.WriteLine("-----------------");
                 Console.WriteLine("Press option");
-                char inputNum = (char)Console.Read();
-                switch (inputNum)
+                ConsoleKeyInfo input = Console.ReadKey(true); // BLOCKING TO WAIT FOR INPUT
+                switch (input.KeyChar)
                 {
                     case '1':
                         player = new Player(NewPlayerName());

@@ -13,7 +13,7 @@ namespace game_2048
         // Constractors
 
         public Player(string inName, int inScore = 0 ) {
-            name = inName.ToLower();
+            name = inName;
             score = inScore;
         }
         // Variables
