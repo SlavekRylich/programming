@@ -35,44 +35,72 @@ namespace game_2048
             Console.WriteLine();
             Console.WriteLine("Zadejte jmeno:");
             string inputName = Console.ReadLine();
+
+            if (highscore.ContainsKey(inputName))
+            {
+                //Console.Write("{0}: ", _archiv[rok].Rok);
+                //for (int i = 0; i < _archiv[rok].MesicniTeploty.Count; i++)
+                //{
+                //    Console.Write("{0:0.0}; ", _archiv[rok].MesicniTeploty[i]);
+                //}
+            }
+            else
+                Console.WriteLine("Nenalezeno");
             Console.WriteLine("Nacitam novou hru...");
             return inputName;
 
         }
-        private void PrintHighScore()
+        private void UpdateHighScores()
         {
-                StreamReader reader = File.OpenText(path);
-                highscore = new SortedDictionary<string, ulong>();
-                string name;
-                ulong score = 0;
+            
+        }
+    }
+    //private void PrintHighScore()
+    //{
+    //    using (HighScore highscore  = new HighScore())
+    //    {
+    //        highscore.PrintHighScore();
+    //    }
+    //}
+    private SortedDictionary<string,ulong> TouchHighScor()
+    {
+        StreamReader reader = File.OpenText(path);
+        highscore = new SortedDictionary<string, ulong>();
+        string name;
+        ulong score = 0;
 
-                string radek = null;
-                while ((radek = reader.ReadLine()) != null)
-                {
-                string[] values = new string[2];
-                     values = radek.Split(' ');
+        string radek = null;
+        while ((radek = reader.ReadLine()) != null)
+        {
+            string[] values = new string[2];
+            values = radek.Split(' ');
 
-                        name = values[0];
-                        score = Convert.ToUInt32(values[1]);
-                    highscore.Add(name, score);
-                }
-                reader.Close();
-            Console.Clear();
-            byte indexer = 0;
-            var sortedDict = from entry in highscore orderby entry.Value descending select entry;
-            Console.WriteLine(" --- TOP 10 Highscore --- ");     // HEAD of highscore list
-            Console.WriteLine("\tJmeno   Body ");
-            Console.WriteLine("---------------------------");
-            foreach (KeyValuePair<string, ulong> kvp in sortedDict)
+            name = values[0];
+            score = Convert.ToUInt32(values[1]);
+            highscore.Add(name, score);
+        }
+        reader.Close();
+        Console.Clear();
+        byte indexer = 0;
+        var sortedDict = from entry in highscore orderby entry.Value descending select entry;
+        Console.WriteLine(" --- TOP 10 Highscore --- ");     // HEAD of highscore list
+        Console.WriteLine("\tJmeno   Body ");
+        Console.WriteLine("---------------------------");
+        return sortedDict;
+    }
+        private void PrintHighScore(SortedDictionary<string, ulong> list) 
+        { 
+            foreach (KeyValuePair<string, ulong> kvp in list)
             {
-                Console.WriteLine(indexer +1 +". {0, 10} {1, 6}",
+            byte indexer = 0;
+            Console.WriteLine(indexer + 1 + ". {0, 10} {1, 6}",
                     kvp.Key, kvp.Value);
                 if (indexer > 10)
                     break;
                 indexer++;
             }
             Console.WriteLine("Press any key to return to the main menu.");
-            Console.Read();
+            Console.ReadKey();
         }
         public void Start()
         {
@@ -92,6 +120,7 @@ namespace game_2048
                 {
                     case '1':
                         player = new Player(NewPlayerName());
+                        
                         game = new Game(path);
                         game.Run(player.GetName);
                         break;
@@ -103,7 +132,9 @@ namespace game_2048
                     case '4':
                         run = false;
                         break;
+                    
                 }
+                
             }
         }
     }
