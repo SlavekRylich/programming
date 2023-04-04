@@ -15,7 +15,6 @@ namespace game_2048
         public HighScore(string path) 
         {
             this.path = path;
-            TouchHighScore();
         }
         private void TouchHighScore()
         {
@@ -38,6 +37,7 @@ namespace game_2048
         }
         public void PrintHighScore()
         {
+
             TouchHighScore();
             Console.Clear();
             byte indexer = 0;

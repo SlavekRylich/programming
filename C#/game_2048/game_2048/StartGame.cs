@@ -28,31 +28,31 @@ namespace game_2048
         // Properties
 
         // Methods
-        private string NewPlayerName(HighScore highScore)
+        public string NewPlayerName(HighScore highScore)
         {
             Console.Clear();
             Console.WriteLine("Nova hra");
             Console.WriteLine();
-            bool validName = false;
+            bool validName = true;
             string inputName=null;
             Console.WriteLine("Zadejte jmeno:");
-            while (!validName)
+            while (validName)
             {
-                
                 inputName = Console.ReadLine();
 
-                if (highScore.Find(inputName))
+                if (!highScore.Find(inputName))
                 {
                     Console.WriteLine("Jmeno je obsazene");
                     Console.WriteLine("Zadejte jmeno znovu a lepe:");
+                    return inputName + "1";
                 }
                 else
                 {
-                    validName = true;   
+                    validName = false;   
                     Console.WriteLine("Nacitam novou hru...");
+                    return inputName;
                 }
             }
-            return inputName;
         }
         private void UpdateHighScores()
         {
