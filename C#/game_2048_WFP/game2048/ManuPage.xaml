@@ -6,9 +6,9 @@
       xmlns:local="clr-namespace:game2048"
       mc:Ignorable="d" 
       d:DesignHeight="540" d:DesignWidth="350"
-        Title="Menu Page" Height="540" Width="350" MinHeight="540" MinWidth="350">
-    
-    <Grid Background="#FFF5F4EF">
+        Title="Menu Page" MaxHeight="540" MaxWidth="350" MinHeight="540" MinWidth="350">
+
+    <Grid Background="#FFF3EECE">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="200*"/>
                     <RowDefinition Height="40"/>

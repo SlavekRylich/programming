@@ -30,7 +30,7 @@ namespace game2048
         {
            GamePage gamePage = new GamePage();
             this.Visibility = Visibility.Hidden;
-            objGamePage.Show();
+            //objGamePage.Show();
         }
     }
 }
