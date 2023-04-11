@@ -53,6 +53,7 @@ namespace game_2048
                     return inputName;
                 }
             }
+            return "a";
         }
         private void UpdateHighScores()
         {
