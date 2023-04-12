@@ -32,4 +32,8 @@ public class Anime extends Production {
 		this.animators.add(animators);
 	}
 
+	public static byte getMaxfeedback() {
+		return MAXFEEDBACK;
+	}
+
 }

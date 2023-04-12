@@ -15,6 +15,7 @@ public class Program {
 		int number=0;
 		try {
 			number=input.nextInt();
+			input.nextLine();
 		}
 		catch (Exception e) 
 		{
@@ -29,6 +30,7 @@ public class Program {
 		short number=0;
 		try {
 			number=input.nextShort();
+			input.nextLine();
 		}
 		catch (Exception e) 
 		{
@@ -38,7 +40,21 @@ public class Program {
 		}
 		return number;
 	}
-	
+	private static byte OnlyByte(Scanner input)
+	{
+		byte number=0;
+		try {
+			number=input.nextByte();
+			input.nextLine();
+		}
+		catch (Exception e) 
+		{
+			System.out.println("zadejte prosim cele cislo ");
+			input.nextLine();
+			number = OnlyByte(input);
+		}
+		return number;
+	}
 
 
 	public static void main(String[] args) {
@@ -76,18 +92,17 @@ public class Program {
 				System.out.println("2. Animovany");
 				System.out.println("Zadejte volbu:");
 				op=OnlyInt(scan);
-				
-				System.out.println("Zadejte nazev:");  // vyresit nacitani viceslovneho nazvu filmu
-				name = scan.next();
+				System.out.println("Zadejte nazev:");  
+				name = scan.nextLine();
 				System.out.println("Zadejte rezisera:");
-				director = scan.next();
+				director = scan.nextLine();
 				System.out.println("Zadejte rok vydani:");
 				year = OnlyShort(scan);
 				switch(op) {
 				case 1:
 				{
 					System.out.println("Zadejte divacke hodnoceni 1-5:");
-					feedback = scan.nextByte();
+					feedback = OnlyByte(scan);
 					System.out.println("Zadat herce:");
 					System.out.println("Ano (y)\n Ne (n)");
 					var opt = scan.next();
@@ -99,8 +114,9 @@ public class Program {
 							effectives = new ArrayList<>();
 							System.out.println("Kolik hercu chcete zadat:");
 							int cnt = OnlyInt(scan);
+							System.out.println("Zadejte herce:"); 
 							for (int i = 0; i < cnt; i++) {
-								effectives.add(scan.nextLine());  // vyresit nacitani 
+								effectives.add(scan.nextLine());
 							}
 							pruductionsList.add(new Film(name, director, year, feedback, effectives));
 							run=true;
@@ -118,9 +134,9 @@ public class Program {
 				}
 				case 2:
 					System.out.println("Zadejte divacke hodnoceni 1-10:");
-					feedback = scan.nextByte();
+					feedback = OnlyByte(scan);
 					System.out.println("Zadejte doporuceny vek:");
-					age = scan.nextByte();
+					age = OnlyByte(scan);
 					System.out.println("Zadat animatory:");
 					System.out.println("Ano (y)\n Ne (n)");
 					var opt = scan.next();
@@ -132,6 +148,7 @@ public class Program {
 							effectives = new ArrayList<>();
 							System.out.println("Kolik animatoru chcete zadat:");
 							int cnt = OnlyInt(scan);
+							System.out.println("Zadejte animatory:");
 							for (int i = 0; i < cnt; i++) {
 								effectives.add(scan.nextLine());
 							}
@@ -152,6 +169,8 @@ public class Program {
 				break;
 				}
 			case 2: {
+				PrintProductions(pruductionsList);
+				System.out.println("Jaky film chcete upravit:");
 				
 				break;
 				}
@@ -160,10 +179,9 @@ public class Program {
 				break;
 				}
 			case 4: {
-				for (Production production : pruductionsList) {
-					System.out.println(production.getName());
+				PrintProductions(pruductionsList);
 						
-					}
+					
 				break;
 				}
 			case 5: {
@@ -204,5 +222,13 @@ public class Program {
 		
 		
 	} // end of main 
+	
+	public static void PrintProductions(List<Production> pruductionsList) {
+		int i=1;
+		for (var piece: pruductionsList) {
+			System.out.println(i + ". " + piece.getName());
+			i++;
+		}
+	}
 
 }

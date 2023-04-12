@@ -6,6 +6,8 @@ public class Film extends Production{
 
 	private final static byte MAXFEEDBACK = 5;
 	
+	
+
 	private List<String> actors;
 	
 	public Film(String name, String director, short yearOfPublication,byte feedback) {
@@ -28,7 +30,9 @@ public class Film extends Production{
 		this.actors.add(actors);
 	}
 
-	
+	public static byte getMaxfeedback() {
+		return MAXFEEDBACK;
+	}
 	
 	
 
