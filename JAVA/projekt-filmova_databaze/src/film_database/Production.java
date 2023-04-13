@@ -1,7 +1,12 @@
 package film_database;
 
+import java.io.Serializable;
 
-public abstract class Production {
+public abstract class Production implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String director;
 	private String comment;

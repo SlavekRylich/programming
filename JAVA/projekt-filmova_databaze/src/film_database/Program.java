@@ -2,6 +2,8 @@ package film_database;
 
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -185,7 +187,7 @@ public class Program {
 				break;
 				}
 			case 5: {
-				
+				Sort(pruductionsList);  // sort the list
 				break;
 				}
 			case 6: {
@@ -197,7 +199,11 @@ public class Program {
 				break;
 				}
 			case 8: {
-				
+				Scanner scan = new Scanner(System.in);
+				PrintProductions(pruductionsList);
+				System.out.println("Zadejte nazev filmu, ktery chcete ulozit");
+				int select = Find(scan,pruductionsList);
+				System.out.println(select);
 				break;
 				}
 			case 9: {
@@ -230,5 +236,32 @@ public class Program {
 			i++;
 		}
 	}
+	public static <T> int Find(Scanner scan, List<Production> list)  // neni dodelane
+	{
+		Collections.sort(list,(o1, o2) -> (o1.getName().compareTo(o2.getName())));  // sort list by Name
+		
+		int count=0;
+		for ( Production iterable_element : list) {
+			if (scan.nextLine() == iterable_element.getName()) 
+			{
+				list.contains(iterable_element.getName());
+				return count;
+			}
+			System.out.println(iterable_element.getName());
+			count++;
+		}
+		return 0;
+	}
+	public static void Sort(List<Production> list)
+	{
+		int count=0;
+		Collections.sort(list,(o1, o2) -> (o1.getName().compareTo(o2.getName())));  // sort list by Name
+		for ( Production iterable_element : list) {
+			
+			System.out.println(iterable_element.getName());
+			count++;
+		}
+	}
+	
 
-}
+} // end of class Program 
