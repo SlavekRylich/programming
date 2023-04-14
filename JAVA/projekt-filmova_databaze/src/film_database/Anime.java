@@ -1,39 +1,45 @@
 package film_database;
 
-import java.util.List;
-
 public class Anime extends Production {
 
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private final static byte MAXFEEDBACK = 10;
 	
 	private byte age;
-	private List<String> animators;
+	
 
 	
-	public Anime(String name, String director, short yearOfPublication,byte feedback, byte age) {
-		super(name, director, yearOfPublication, feedback);
-		this.age=age;
+	public Anime(String name, short yearOfPublication,byte feedback, byte age) {
+		super(name, yearOfPublication, feedback);
+		this.setAge(age);
 	}
 	
-	public Anime(String name, String director, short yearOfPublication,byte feedback, byte age, List<String> animators) {
-		super(name, director, yearOfPublication, feedback);
-		this.age=age;
-		this.animators=animators;
-	}
+	@Override
+	public String toString() {
+		return "animak: " + super.getName();	
+		}
 
-
-	public List<String> getAnimators() {
-		return animators;
-	}
-
-
-	public void setAnimators(String animators) {
-		this.animators.add(animators);
-	}
 
 	public static byte getMaxfeedback() {
 		return MAXFEEDBACK;
+	}
+
+	public byte getAge() {
+		return age;
+	}
+
+	public void setAge(byte age) {
+		this.age = age;
+	}
+	
+	@Override
+	public void addActor(String name, String surname) {
+		super.effectives.add(new Animator(name,surname));
 	}
 
 }

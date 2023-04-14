@@ -1,9 +1,7 @@
 package film_database;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -59,10 +57,13 @@ public class Program {
 	}
 
 
+	
 	public static void main(String[] args) {
 		
 		List<Production> pruductionsList = new ArrayList<>();
-		List<String> effectives;
+		int ID=2;
+		
+		Database database = new Database();
 		
 		Scanner sc = new Scanner(System.in);
 		int option=0;
@@ -85,26 +86,35 @@ public class Program {
 			case 1: {
 				int op;
 				String name;
-				String director;
+				String directorName;
+				String directorSurname;
 				short year;
 				byte feedback;
 				byte age;
 				Scanner scan = new Scanner(System.in);
-				System.out.println("1. Hrany");
+				
+				System.out.println("1. Hrany film");
 				System.out.println("2. Animovany");
 				System.out.println("Zadejte volbu:");
 				op=OnlyInt(scan);
 				System.out.println("Zadejte nazev:");  
 				name = scan.nextLine();
-				System.out.println("Zadejte rezisera:");
-				director = scan.nextLine();
+				System.out.println("Zadejte jmeno a prijmeni rezisera:");
+				directorName = scan.next();
+				directorSurname= scan.next();
 				System.out.println("Zadejte rok vydani:");
 				year = OnlyShort(scan);
+				
 				switch(op) {
 				case 1:
 				{
 					System.out.println("Zadejte divacke hodnoceni 1-5:");
 					feedback = OnlyByte(scan);
+					
+					//pruductionsList.add(new Film(ID++,name, director, year, feedback));
+					
+					database.addFilm(name, year, feedback);
+					
 					System.out.println("Zadat herce:");
 					System.out.println("Ano (y)\n Ne (n)");
 					var opt = scan.next();
@@ -113,18 +123,19 @@ public class Program {
 					while (!run)
 						switch (opt) {
 						case "y": 
-							effectives = new ArrayList<>();
+							//effectives = new ArrayList<>();
+							
 							System.out.println("Kolik hercu chcete zadat:");
-							int cnt = OnlyInt(scan);
-							System.out.println("Zadejte herce:"); 
+							int cnt = OnlyInt(scan); 
 							for (int i = 0; i < cnt; i++) {
-								effectives.add(scan.nextLine());
+								System.out.println("Zadejte jmeno a prijmeni " + (i + 1) + ". herce:");
+								database.getProduction(ID-1).addActor(scan.next(), scan.next());
+								
+								//effectives.add(scan.nextLine());
 							}
-							pruductionsList.add(new Film(name, director, year, feedback, effectives));
 							run=true;
 							break;
 						case "n":
-							pruductionsList.add(new Film(name, director, year, feedback));
 							run=true;
 							break;
 						default:
@@ -139,6 +150,9 @@ public class Program {
 					feedback = OnlyByte(scan);
 					System.out.println("Zadejte doporuceny vek:");
 					age = OnlyByte(scan);
+
+					database.addAnime(name,year, feedback, age);
+					
 					System.out.println("Zadat animatory:");
 					System.out.println("Ano (y)\n Ne (n)");
 					var opt = scan.next();
@@ -147,18 +161,16 @@ public class Program {
 					while (!run)
 						switch (opt) {
 						case "y": 
-							effectives = new ArrayList<>();
+							//effectives = new ArrayList<>();							
 							System.out.println("Kolik animatoru chcete zadat:");
 							int cnt = OnlyInt(scan);
-							System.out.println("Zadejte animatory:");
 							for (int i = 0; i < cnt; i++) {
-								effectives.add(scan.nextLine());
+								System.out.println("Zadejte jmeno a prijmeni " + (i+1) + ". animatora:");
+								database.getProduction(ID - 1).addActor(scan.next(), scan.next());
 							}
-							pruductionsList.add(new Anime(name, director, year, feedback,age, effectives));
 							run=true;
 							break;
 						case "n":
-							pruductionsList.add(new Anime(name, director, year, feedback,age));
 							run=true;
 							break;
 						default:
@@ -167,21 +179,89 @@ public class Program {
 					
 					break;
 				}
-
+				
+				database.getProduction(ID-1).setDirector(directorName,directorSurname);
 				break;
+				
 				}
 			case 2: {
-				PrintProductions(pruductionsList);
-				System.out.println("Jaky film chcete upravit:");
-				
-				break;
+				Scanner scan = new Scanner(System.in);
+				database.PrintDatabase();
+				System.out.println("Zadejte nazev filmu:");
+				Production change = database.FindByName(scan.nextLine());
+				if (change != null)
+				{
+					boolean close = false;
+					while(!close)
+					{
+						System.out.println("Vybran: " + change.getName());
+						System.out.println("Upravit: ");
+						System.out.println("1. Nazev");
+						System.out.println("2. Rezisera");
+						System.out.println("3. Rok vydani");
+						if (change.getClass()== Film.class)
+						{
+						System.out.println("4. Seznam hercu");
+						}
+						else if (change.getClass()== Anime.class)
+						{
+						System.out.println("4. Seznam animatoru");
+						System.out.println("5. Doporuceny vek");
+						}
+						System.out.println("0. Ukoncit upravy");
+						switch (OnlyInt(scan)) {
+						case 1:
+							System.out.println(change.getName() +" - Upravit na: ");
+							change.setName(scan.nextLine());
+							break;
+						case 2:
+							System.out.println(change.getDirector() +" - Upravit na: ");
+							change.setDirector(scan.next(),scan.next());
+							break;
+						case 3:
+							System.out.println(change.getYearOfPublication() +" - Upravit na: ");
+							change.setYearOfPublication(scan.nextShort());
+							break;
+						case 4:
+							int i=1;
+							for (Iterator<Human> iterator = change.getActors().iterator(); iterator.hasNext();) {
+								String string = (iterator.next().getFullName());
+								System.out.println(i +". " +string);
+								i++;
+							}
+							System.out.println("Ktereho ucinkujiciho chcete zmenit? (cislo):");
+							int choice=OnlyInt(scan);
+							for (Iterator<Human> iterator = change.getActors().iterator(); iterator.hasNext();) {
+								String string = (iterator.next().getFullName());
+								System.out.println(i +". " +string);
+								i++;															// tady sem skoncil, nechcelo to spravne pocitat ID
+							}
+							break;
+						case 5:
+							
+							break;
+						case 0:
+							close=true;
+							break;
+	
+						default:
+							System.out.println("Zadejte cisla pouze z nabidky");
+							break;
+						}
+						
+					}
+					break;
+					}
+				else
+					System.out.println("Film nenalezen");
 				}
+			
 			case 3: {
 				
 				break;
 				}
 			case 4: {
-				PrintProductions(pruductionsList);
+				database.PrintDatabase();
 						
 					
 				break;
@@ -236,6 +316,7 @@ public class Program {
 			i++;
 		}
 	}
+	
 	public static <T> int Find(Scanner scan, List<Production> list)  // neni dodelane
 	{
 		Collections.sort(list,(o1, o2) -> (o1.getName().compareTo(o2.getName())));  // sort list by Name

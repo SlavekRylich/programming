@@ -1,23 +1,30 @@
 package film_database;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class Production implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final AtomicInteger count = new AtomicInteger(0); 
+	protected int ID=1;
 	private String name;
-	private String director;
+	private Human director;
 	private String comment;
 	private byte feedback;
 	private short yearOfPublication;
+	protected ArrayList<Human> effectives;
 	
-	public Production(String name, String director, short yearOfPublication, byte feedback)	{
+	public Production(String name, short yearOfPublication, byte feedback)	{
+		ID = count.incrementAndGet();
 		this.name=name;
-		this.director=director;
 		this.yearOfPublication=yearOfPublication;
 		this.feedback=feedback;
+		effectives = new ArrayList<>();
+		
 	}
 
 	
@@ -29,18 +36,6 @@ public abstract class Production implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-
-
-	public String getDirector() {
-		return director;
-	}
-
-
-	public void setDirector(String director) {
-		this.director = director;
-	}
-
-
 	public byte getFeedback() {
 		return feedback;
 	}
@@ -68,6 +63,44 @@ public abstract class Production implements Serializable{
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+
+
+	public  int getID() {
+		return ID;
+	}
+
+
+	public  void setID(int ID) {
+		this.ID = ID;
+	}
+
+
+	public ArrayList<Human> getActors() {
+		return effectives;
+	}
+
+	public void addActor(String name, String surname) {}
 	
+	public String getDirector()
+	{
+		return this.director.toString();
+	}
+	public void setDirector(String name, String surname) {
+		this.director = new Director(name, surname);
+	}
+	public Human FindByID()
+	{
+		for (var item: effectives) {
+			var id = item.getID();
+		    var key = item.toString();
+		    //String name = effectives.get(item).getName();
+			/*
+			 * if (name.equals(word)) { return databaseItems.get(item); } else {
+			 * System.out.println(" nic"); }
+			 */
+		}
+		return null;
+		
+	}
 	
 }

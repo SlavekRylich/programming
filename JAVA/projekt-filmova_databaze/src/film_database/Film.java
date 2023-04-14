@@ -1,37 +1,31 @@
 package film_database;
 
-import java.util.List;
-
 public class Film extends Production{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final static byte MAXFEEDBACK = 5;
 	
-	
-
-	private List<String> actors;
-	
-	public Film(String name, String director, short yearOfPublication,byte feedback) {
-		super(name, director, yearOfPublication, feedback);
+	public Film(String name, short yearOfPublication,byte feedback) {
+		super(name, yearOfPublication, feedback);
 		
 	}
 	
-	public Film(String name, String director, short yearOfPublication,byte feedback, List<String> actors) {
-		super(name, director, yearOfPublication, feedback);
-		this.actors=actors;
-		
+	@Override
+	public String toString() {
+		return "film:   " + super.getName();
 	}
 	
-	
-	public List<String> getActors() {
-		return actors;
-	}
-
-	public void setActors(String actors) {
-		this.actors.add(actors);
-	}
 
 	public static byte getMaxfeedback() {
 		return MAXFEEDBACK;
+	}
+	
+	@Override
+	public void addActor(String name, String surname) {
+		super.effectives.add(new Actor(name,surname));
 	}
 	
 	
