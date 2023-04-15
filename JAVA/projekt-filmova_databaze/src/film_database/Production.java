@@ -81,23 +81,32 @@ public abstract class Production implements Serializable{
 
 	public void addActor(String name, String surname) {}
 	
+	public void deleteActor(int id)
+	{
+		Human human = FindByID(id);
+		effectives.remove(human);
+	}
+	
 	public String getDirector()
 	{
-		return this.director.toString();
+		return this.director.getFullName();
 	}
 	public void setDirector(String name, String surname) {
 		this.director = new Director(name, surname);
 	}
-	public Human FindByID()
+	public Human FindByID(int number)
 	{
-		for (var item: effectives) {
-			var id = item.getID();
-		    var key = item.toString();
-		    //String name = effectives.get(item).getName();
-			/*
-			 * if (name.equals(word)) { return databaseItems.get(item); } else {
-			 * System.out.println(" nic"); }
-			 */
+		for (var item: effectives) 
+		{
+			int id = item.getID();
+		    //var key = item.toString();
+		    //String name = effectives.get(number).getFullName();
+			
+			  if (id == number)
+			  {
+			  return item;
+			  }
+			 
 		}
 		return null;
 		

@@ -10,7 +10,7 @@ public class Director extends Human{
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return super.getName() + " " + super.getSurname() + " jsem reziser";
+		return super.getName() + " " + super.getSurname() + " reziser";
 	}
 
 }

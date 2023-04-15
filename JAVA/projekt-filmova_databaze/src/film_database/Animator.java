@@ -10,7 +10,7 @@ public class Animator extends Human{
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return super.getName() + " " + super.getSurname() + " jsem animator";
+		return super.getName() + " " + super.getSurname() + " animator";
 	}
 
 }

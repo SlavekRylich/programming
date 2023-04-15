@@ -8,7 +8,7 @@ public class Human {
 	private int ID=1;
 	private String name;
 	private String surname;
-	private String fullName;
+	//private String fullName;
 	private ArrayList<Production> productions;
 	private ArrayList<Production> artworks;
 	
@@ -62,7 +62,12 @@ public class Human {
 	
 	public String getFullName()
 	{
-		return this.getID() + " " + this.getName() + " " + this.getSurname();
+		return this.getName() + " " + this.getSurname();
+	}
+	
+	public String getFullNameWithID()
+	{
+		return this.getID()+ " " + this.getName() + " " + this.getSurname();
 	}
 	
 	

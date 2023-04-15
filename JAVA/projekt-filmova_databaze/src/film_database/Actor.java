@@ -10,7 +10,7 @@ public class Actor extends Human{
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return super.getName() + " " + super.getSurname() + " jsem herec";
+		return super.getName() + " " + super.getSurname() + " herec";
 	}
 
 }

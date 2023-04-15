@@ -8,8 +8,6 @@ import java.util.Scanner;
 
 public class Program {
 	
-	//private Production [] productionsArray;
-	
 	private static int OnlyInt(Scanner input)
 	{
 		int number=0;
@@ -61,7 +59,7 @@ public class Program {
 	public static void main(String[] args) {
 		
 		List<Production> pruductionsList = new ArrayList<>();
-		int ID=2;
+		int ID=0;
 		
 		Database database = new Database();
 		
@@ -111,9 +109,7 @@ public class Program {
 					System.out.println("Zadejte divacke hodnoceni 1-5:");
 					feedback = OnlyByte(scan);
 					
-					//pruductionsList.add(new Film(ID++,name, director, year, feedback));
-					
-					database.addFilm(name, year, feedback);
+					ID = database.addFilm(name, year, feedback);
 					
 					System.out.println("Zadat herce:");
 					System.out.println("Ano (y)\n Ne (n)");
@@ -123,15 +119,12 @@ public class Program {
 					while (!run)
 						switch (opt) {
 						case "y": 
-							//effectives = new ArrayList<>();
 							
 							System.out.println("Kolik hercu chcete zadat:");
 							int cnt = OnlyInt(scan); 
 							for (int i = 0; i < cnt; i++) {
 								System.out.println("Zadejte jmeno a prijmeni " + (i + 1) + ". herce:");
-								database.getProduction(ID-1).addActor(scan.next(), scan.next());
-								
-								//effectives.add(scan.nextLine());
+								database.getProduction(ID).addActor(scan.next(), scan.next());
 							}
 							run=true;
 							break;
@@ -146,27 +139,27 @@ public class Program {
 					break;
 				}
 				case 2:
+					boolean run=false;
 					System.out.println("Zadejte divacke hodnoceni 1-10:");
 					feedback = OnlyByte(scan);
 					System.out.println("Zadejte doporuceny vek:");
 					age = OnlyByte(scan);
 
-					database.addAnime(name,year, feedback, age);
+					ID = database.addAnime(name,year, feedback, age);
 					
 					System.out.println("Zadat animatory:");
 					System.out.println("Ano (y)\n Ne (n)");
 					var opt = scan.next();
-					boolean run=false;
+					
 					
 					while (!run)
 						switch (opt) {
 						case "y": 
-							//effectives = new ArrayList<>();							
 							System.out.println("Kolik animatoru chcete zadat:");
 							int cnt = OnlyInt(scan);
 							for (int i = 0; i < cnt; i++) {
 								System.out.println("Zadejte jmeno a prijmeni " + (i+1) + ". animatora:");
-								database.getProduction(ID - 1).addActor(scan.next(), scan.next());
+								database.getProduction(ID).addActor(scan.next(), scan.next());
 							}
 							run=true;
 							break;
@@ -180,7 +173,7 @@ public class Program {
 					break;
 				}
 				
-				database.getProduction(ID-1).setDirector(directorName,directorSurname);
+				database.getProduction(ID).setDirector(directorName,directorSurname);
 				break;
 				
 				}
@@ -195,7 +188,6 @@ public class Program {
 					while(!close)
 					{
 						System.out.println("Vybran: " + change.getName());
-						System.out.println("Upravit: ");
 						System.out.println("1. Nazev");
 						System.out.println("2. Rezisera");
 						System.out.println("3. Rok vydani");
@@ -209,6 +201,8 @@ public class Program {
 						System.out.println("5. Doporuceny vek");
 						}
 						System.out.println("0. Ukoncit upravy");
+						System.out.println("Upravit: ");
+
 						switch (OnlyInt(scan)) {
 						case 1:
 							System.out.println(change.getName() +" - Upravit na: ");
@@ -224,18 +218,35 @@ public class Program {
 							break;
 						case 4:
 							int i=1;
-							for (Iterator<Human> iterator = change.getActors().iterator(); iterator.hasNext();) {
-								String string = (iterator.next().getFullName());
-								System.out.println(i +". " +string);
-								i++;
+							System.out.println("1: Pridat");
+							System.out.println("2: Zmenit");							// tady sem skoncil, zacal sem premyslet nad duplicitou osob
+							System.out.println("3: Odebrat");							// a zpetne reference - relace osob na filmy
+							switch (OnlyInt(scan)) {
+							case 1:
+								System.out.println("Zadejte jmeno a prijmeni:");
+								change.addActor(scan.next(), scan.next());
+								break;
+							case 2:
+								System.out.println("Index Jmeno Prijmeni");
+								for (Iterator<Human> iterator = change.getActors().iterator(); iterator.hasNext();) 
+								{
+									String string = (iterator.next().getFullNameWithID());
+									System.out.println(string);
+									i++;
+								}
+								System.out.println("Ktereho chcete zmenit? (index):");
+								int choice=OnlyInt(scan);
+								change.deleteActor(choice);
+								break;
+							case 3:
+	
+								break;
+							default:
+								System.out.println("Zadejte cisla pouze z nabidky");
+								break;
 							}
-							System.out.println("Ktereho ucinkujiciho chcete zmenit? (cislo):");
-							int choice=OnlyInt(scan);
-							for (Iterator<Human> iterator = change.getActors().iterator(); iterator.hasNext();) {
-								String string = (iterator.next().getFullName());
-								System.out.println(i +". " +string);
-								i++;															// tady sem skoncil, nechcelo to spravne pocitat ID
-							}
+							
+							
 							break;
 						case 5:
 							

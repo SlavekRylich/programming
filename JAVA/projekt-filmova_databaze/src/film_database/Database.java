@@ -20,16 +20,18 @@ public class Database {
 		this.databaseItems = databaseItems;
 	}
 	
-	public void addFilm(String name,short year,byte feedback)
+	public int addFilm(String name,short year,byte feedback)
 	{
 		Production newItem = new Film(name, year, feedback);
 		databaseItems.put(ID++, newItem);
+		return ID - 1 ;
 	}
 	
-	public void addAnime(String name, short year,byte feedback, byte age)
+	public int addAnime(String name, short year,byte feedback, byte age)
 	{
 		Production newItem = new Anime(name, year, feedback, age);
 		databaseItems.put(ID++, newItem);
+		return ID - 1 ;
 	}
 	
 	public Production getProduction(int ID)
@@ -54,10 +56,6 @@ public class Database {
 		    {
 		    	return databaseItems.get(item);
 		    }
-		    else 
-		    {
-		    	System.out.println(" nic");
-			}
 		}
 		return null;
 	}
