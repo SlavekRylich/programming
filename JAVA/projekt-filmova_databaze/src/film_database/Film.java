@@ -19,7 +19,7 @@ public class Film extends Production{
 	}
 	
 
-	public static byte getMaxfeedback() {
+	public byte getMaxfeedback() {
 		return MAXFEEDBACK;
 	}
 	

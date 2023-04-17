@@ -4,13 +4,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Feedback {
 	private static final AtomicInteger count = new AtomicInteger(0); 
-	protected int ID=1;
+	private int ID=1;
 	private String comment;
 	private int number;
 	
 	public Feedback(int number, String comment)
 	{
-		ID = count.incrementAndGet();
+		setID(count.incrementAndGet());
 		this.setNumber(number);
 		this.setComment(comment);
 	}
@@ -33,7 +33,15 @@ public class Feedback {
 	
 	@Override
 	public String toString() {
-		return number + " " + comment;
+		return number + " - " + comment;
+	}
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
 	}
 
 }

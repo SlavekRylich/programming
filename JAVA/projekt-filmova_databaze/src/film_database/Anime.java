@@ -25,7 +25,7 @@ public class Anime extends Production {
 		}
 
 
-	public static byte getMaxfeedback() {
+	public byte getMaxfeedback() {
 		return MAXFEEDBACK;
 	}
 

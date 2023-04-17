@@ -16,7 +16,7 @@ public abstract class Production implements Serializable{
 	//private ArrayList<String> comment;
 	//private int commentCounter=0;
 	//private ArrayList<Byte> feed;
-	private Feedback feedback;
+	private ArrayList<Feedback> feedback = new ArrayList<>();
 	private short yearOfPublication;
 	protected ArrayList<Human> effectives;
 	
@@ -24,7 +24,7 @@ public abstract class Production implements Serializable{
 		ID = count.incrementAndGet();
 		this.name=name;
 		this.yearOfPublication=yearOfPublication;
-		this.feedback = new Feedback(feedback, "");
+		this.feedback.add(new Feedback(feedback, ""));
 		effectives = new ArrayList<>();
 		
 	}
@@ -38,13 +38,13 @@ public abstract class Production implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getFeedback() {
-		return feedback.toString();
+	public ArrayList<Feedback> getFeedback() {
+		return feedback;
 	}
 
 
 	public void setFeedback(byte feedback, String comment) {
-		this.feedback = new Feedback(feedback, comment);
+		this.feedback.add(new Feedback(feedback, comment));
 	}
 
 
@@ -56,9 +56,6 @@ public abstract class Production implements Serializable{
 	public void setYearOfPublication(short yearOfPublication) {
 		this.yearOfPublication = yearOfPublication;
 	}
-
-
-	
 
 
 	public  int getID() {
@@ -95,8 +92,6 @@ public abstract class Production implements Serializable{
 		for (var item: effectives) 
 		{
 			int id = item.getID();
-		    //var key = item.toString();
-		    //String name = effectives.get(number).getFullName();
 			
 			  if (id == number)
 			  {
@@ -105,5 +100,7 @@ public abstract class Production implements Serializable{
 		}
 		return null;
 	}
+	
+	public abstract byte getMaxfeedback();
 	
 }

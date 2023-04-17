@@ -299,7 +299,12 @@ public class Program {
 				Production insertFeedback = FindProduct(scan,database);
 				if (insertFeedback !=null)
 				{
-					
+					System.out.println("Hodnoceni:");
+					for (Feedback feedback : insertFeedback.getFeedback()) {
+						System.out.println(feedback.toString());
+					}
+					System.out.println("Zadejte hodnoceni 1-"+ insertFeedback.getMaxfeedback() +" a komentar:");
+					insertFeedback.setFeedback(OnlyByte(scan), scan.next());
 																	// tady sem skoncil, vlozit hodnoceni, nova trida Feedback
 				}
 				break;
