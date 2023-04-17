@@ -71,17 +71,18 @@ public class Program {
 			System.out.println("1. Pridat novy film");
 			System.out.println("2. Upravit existujici film");
 			System.out.println("3. Smazat film");
-			System.out.println("4. Vypis filmu");
-			System.out.println("5. Vyhledat film");
-			System.out.println("6. Vypis hercu nebo animatoru ucinkujicich ve vice filmech");
-			System.out.println("7. Vypis vsech filmu podle ucinkovani daneho herce nebo animatora");
-			System.out.println("8. Ulozit film do souboru");
-			System.out.println("9. Nacteni filmu ze souboru");
-			System.out.println("10. Ukonceni programu");
+			System.out.println("4. Vlozit hodnoceni filmu");
+			System.out.println("5. Vypis filmu");
+			System.out.println("6. Vyhledat film");
+			System.out.println("7. Vypis hercu nebo animatoru ucinkujicich ve vice filmech");
+			System.out.println("8. Vypis vsech filmu podle ucinkovani daneho herce nebo animatora");
+			System.out.println("9. Ulozit film do souboru");
+			System.out.println("10. Nacteni filmu ze souboru");
+			System.out.println("11. Ukonceni programu");
 			option=OnlyInt(sc);
 
 			switch (option) {
-			case 1: {
+			case 1: {						// "1. Pridat novy film"
 				int op;
 				String name;
 				String directorName;
@@ -177,11 +178,9 @@ public class Program {
 				break;
 				
 				}
-			case 2: {
+			case 2: {												//"2. Upravit existujici film"
 				Scanner scan = new Scanner(System.in);
-				database.PrintDatabase();
-				System.out.println("Zadejte nazev filmu:");
-				Production change = database.FindByName(scan.nextLine());
+				Production change = FindProduct(scan,database);
 				if (change != null)
 				{
 					boolean close = false;
@@ -217,9 +216,8 @@ public class Program {
 							change.setYearOfPublication(scan.nextShort());
 							break;
 						case 4:
-							int i=1;
-							System.out.println("1: Pridat");
-							System.out.println("2: Zmenit");							// tady sem skoncil, zacal sem premyslet nad duplicitou osob
+							System.out.println("1: Pridat");				// potom vyresit podminku, kdyz pridam herce jestli podle jmena uz existuje tak se jen priradi
+							System.out.println("2: Zmenit");				// nebo se vytrvori novy Human
 							System.out.println("3: Odebrat");							// a zpetne reference - relace osob na filmy
 							switch (OnlyInt(scan)) {
 							case 1:
@@ -232,14 +230,23 @@ public class Program {
 								{
 									String string = (iterator.next().getFullNameWithID());
 									System.out.println(string);
-									i++;
 								}
 								System.out.println("Ktereho chcete zmenit? (index):");
 								int choice=OnlyInt(scan);
 								change.deleteActor(choice);
+								System.out.println("Zadejte jmeno a prijmeni noveho:");
+								change.addActor(scan.next(), scan.next());
 								break;
 							case 3:
-	
+								System.out.println("Index Jmeno Prijmeni");
+								for (Iterator<Human> iterator = change.getActors().iterator(); iterator.hasNext();) 
+								{
+									String string = (iterator.next().getFullNameWithID());
+									System.out.println(string);
+								}
+								System.out.println("Ktereho chcete zmenit? (index):");
+								choice=OnlyInt(scan);
+								change.deleteActor(choice);
 								break;
 							default:
 								System.out.println("Zadejte cisla pouze z nabidky");
@@ -249,7 +256,15 @@ public class Program {
 							
 							break;
 						case 5:
-							
+							if (change.getClass() == Anime.class)
+							{
+								System.out.println(((Anime) change).getAge() +" - Upravit na: ");
+								((Anime)change).setAge(OnlyByte(scan));
+							}
+							else
+							{
+								System.out.println("Zadejte cisla pouze z nabidky");
+							}
 							break;
 						case 0:
 							close=true;
@@ -264,32 +279,49 @@ public class Program {
 					break;
 					}
 				else
-					System.out.println("Film nenalezen");
+					break;
 				}
 			
-			case 3: {
-				
+			case 3: {																		//"3. Smazat film"
+				Scanner scan = new Scanner(System.in);
+				Production remove = FindProduct(scan,database);
+				if (remove !=null)
+				{
+					if (database.DelProduction(remove.getID()) != false) 
+					{
+						System.out.println("Uspesne smazano");
+					}
+				}
 				break;
 				}
-			case 4: {
+			case 4: {																		//"4.Vlozit hodnoceni"
+				Scanner scan = new Scanner(System.in);
+				Production insertFeedback = FindProduct(scan,database);
+				if (insertFeedback !=null)
+				{
+					
+																	// tady sem skoncil, vlozit hodnoceni, nova trida Feedback
+				}
+				break;
+			}
+			case 5: {																		//"5. Vypis filmu"
 				database.PrintDatabase();
-						
 					
 				break;
 				}
-			case 5: {
+			case 6: {																		//"6. Vyhledat film"
 				Sort(pruductionsList);  // sort the list
 				break;
 				}
-			case 6: {
+			case 7: {																		//"7. Vypis hercu nebo animatoru ucinkujicich ve vice filmech"
 				
 				break;
 				}
-			case 7: {
+			case 8: {																		//"8. Vypis vsech filmu podle ucinkovani daneho herce nebo animatora"
 				
 				break;
 				}
-			case 8: {
+			case 9: {																		//"9. Ulozit film do souboru"
 				Scanner scan = new Scanner(System.in);
 				PrintProductions(pruductionsList);
 				System.out.println("Zadejte nazev filmu, ktery chcete ulozit");
@@ -297,12 +329,12 @@ public class Program {
 				System.out.println(select);
 				break;
 				}
-			case 9: {
+			case 10: {																		//"10. Nacteni filmu ze souboru"
 				
 				break;
 				}
-			case 10: {
-				System.out.println();
+			case 11: {																		//"11. Ukonceni programu"
+				System.out.println();	
 				System.out.println("konec programu...");
 				}
 				end = true;
@@ -354,6 +386,21 @@ public class Program {
 			count++;
 		}
 	}
+	
+	public static Production FindProduct(Scanner sc, Database database)
+	{
+		if (database.PrintDatabase())
+		{
+			System.out.println("Zadejte nazev filmu:");
+			
+			return database.FindByName(sc.nextLine());
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	
 
 } // end of class Program 

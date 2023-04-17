@@ -34,17 +34,31 @@ public class Database {
 		return ID - 1 ;
 	}
 	
+	public boolean DelProduction(Integer productKey)
+	{
+		
+		return databaseItems.remove(productKey) != null;
+	}
+	
 	public Production getProduction(int ID)
 	{
 		return databaseItems.get(ID);
 	}
 	
-	public void PrintDatabase()
+	public boolean PrintDatabase()
 	{
-		for (Integer item: databaseItems.keySet()) {
-		    String key = item.toString();
-		    String value = databaseItems.get(item).toString();
-		    System.out.println(key + " " + value);
+		if (databaseItems.size() != 0)
+		{
+			for (Integer item: databaseItems.keySet()) {
+			    String key = item.toString();
+			    String value = databaseItems.get(item).toString();
+			    System.out.println(key + " " + value);
+			}
+			return true;
+		}
+		else {
+			System.out.println("V databazi neni zadany zadny film");
+			return false;
 		}
 	}
 	public Production FindByName(String word)
@@ -57,6 +71,7 @@ public class Database {
 		    	return databaseItems.get(item);
 		    }
 		}
+		System.out.println("Film nenalezen");
 		return null;
 	}
 
