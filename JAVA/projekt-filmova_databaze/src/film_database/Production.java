@@ -20,11 +20,10 @@ public abstract class Production implements Serializable{
 	private short yearOfPublication;
 	protected ArrayList<Human> effectives;
 	
-	public Production(String name, short yearOfPublication, byte feedback)	{
+	public Production(String name, short yearOfPublication)	{
 		ID = count.incrementAndGet();
 		this.name=name;
 		this.yearOfPublication=yearOfPublication;
-		this.feedback.add(new Feedback(feedback, ""));
 		effectives = new ArrayList<>();
 		
 	}

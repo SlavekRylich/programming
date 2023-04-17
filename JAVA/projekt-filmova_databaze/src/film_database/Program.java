@@ -83,100 +83,107 @@ public class Program {
 
 			switch (option) {
 			case 1: {						// "1. Pridat novy film"
-				int op;
+				int op=0;
 				String name;
 				String directorName;
 				String directorSurname;
 				short year;
-				byte feedback;
 				byte age;
 				Scanner scan = new Scanner(System.in);
+				boolean cond=false;
 				
-				System.out.println("1. Hrany film");
-				System.out.println("2. Animovany");
-				System.out.println("Zadejte volbu:");
-				op=OnlyInt(scan);
-				System.out.println("Zadejte nazev:");  
-				name = scan.nextLine();
-				System.out.println("Zadejte jmeno a prijmeni rezisera:");
-				directorName = scan.next();
-				directorSurname= scan.next();
-				System.out.println("Zadejte rok vydani:");
-				year = OnlyShort(scan);
 				
-				switch(op) {
-				case 1:
-				{
-					System.out.println("Zadejte divacke hodnoceni 1-5:");
-					feedback = OnlyByte(scan);
+					System.out.println("1. Hrany film");
+					System.out.println("2. Animovany");
+					System.out.println("Zadejte volbu:");
+					while (!cond)
+					{
+						op=OnlyInt(scan);
+						if (op != 1 && op != 2)
+						{
+							System.out.println("Zadejte pouze z daneho rozsahu:");
+						}
+						else cond=true;
+					}
+					System.out.println("Zadejte nazev:");  
+					name = scan.nextLine();
+					System.out.println("Zadejte jmeno a prijmeni rezisera:");
+					directorName = scan.next();
+					directorSurname= scan.next();
+					System.out.println("Zadejte rok vydani:");
+					year = OnlyShort(scan);
 					
-					ID = database.addFilm(name, year, feedback);
-					
-					System.out.println("Zadat herce:");
-					System.out.println("Ano (y)\n Ne (n)");
-					var opt = scan.next();
-					boolean run=false;
-					
-					while (!run)
-						switch (opt) {
-						case "y": 
+					switch(op) {
+						case 1:
+						{
 							
-							System.out.println("Kolik hercu chcete zadat:");
-							int cnt = OnlyInt(scan); 
-							for (int i = 0; i < cnt; i++) {
-								System.out.println("Zadejte jmeno a prijmeni " + (i + 1) + ". herce:");
-								database.getProduction(ID).addActor(scan.next(), scan.next());
-							}
-							run=true;
+							ID = database.addFilm(name, year);
+							System.out.println("Zadat herce:");
+							System.out.println("Ano (y)\n Ne (n)");
+							var opt = scan.next();
+							boolean run=false;
+							
+							while (!run)
+								switch (opt) {
+								case "y": 
+									
+									System.out.println("Kolik hercu chcete zadat:");
+									int cnt = OnlyInt(scan); 
+									for (int i = 0; i < cnt; i++) {
+										System.out.println("Zadejte jmeno a prijmeni " + (i + 1) + ". herce:");
+										database.getProduction(ID).addActor(scan.next(), scan.next());
+									}
+									run=true;
+									break;
+								case "n":
+									run=true;
+									break;
+								default:
+									System.out.println("Zadejte pouze y nebo n");
+								}
 							break;
-						case "n":
-							run=true;
-							break;
-						default:
-							System.out.println("Zadejte pouze y nebo n");
 						}
-					
-					
-					break;
-				}
-				case 2:
-					boolean run=false;
-					System.out.println("Zadejte divacke hodnoceni 1-10:");
-					feedback = OnlyByte(scan);
-					System.out.println("Zadejte doporuceny vek:");
-					age = OnlyByte(scan);
-
-					ID = database.addAnime(name,year, feedback, age);
-					
-					System.out.println("Zadat animatory:");
-					System.out.println("Ano (y)\n Ne (n)");
-					var opt = scan.next();
-					
-					
-					while (!run)
-						switch (opt) {
-						case "y": 
-							System.out.println("Kolik animatoru chcete zadat:");
-							int cnt = OnlyInt(scan);
-							for (int i = 0; i < cnt; i++) {
-								System.out.println("Zadejte jmeno a prijmeni " + (i+1) + ". animatora:");
-								database.getProduction(ID).addActor(scan.next(), scan.next());
-							}
-							run=true;
+						case 2:
+						{
+							cond=true;
+							boolean run=false;
+							System.out.println("Zadejte doporuceny vek:");
+							age = OnlyByte(scan);
+		
+							ID = database.addAnime(name,year, age);
+							
+							System.out.println("Zadat animatory:");
+							System.out.println("Ano (y)\n Ne (n)");
+							var opt = scan.next();
+							
+							
+							while (!run)
+								switch (opt) {
+								case "y": 
+									System.out.println("Kolik animatoru chcete zadat:");
+									int cnt = OnlyInt(scan);
+									for (int i = 0; i < cnt; i++) {
+										System.out.println("Zadejte jmeno a prijmeni " + (i+1) + ". animatora:");
+										database.getProduction(ID).addActor(scan.next(), scan.next());
+									}
+									run=true;
+									break;
+								case "n":
+									run=true;
+									break;
+								default:
+									System.out.println("Zadejte pouze y nebo n");
+								}
+							
 							break;
-						case "n":
-							run=true;
-							break;
-						default:
-							System.out.println("Zadejte pouze y nebo n");
 						}
+						default:
+							System.out.println("Zadejte pouze z nabidky");
+							break;
+					}
 					
+					database.getProduction(ID).setDirector(directorName,directorSurname);
 					break;
-				}
-				
-				database.getProduction(ID).setDirector(directorName,directorSurname);
-				break;
-				
 				}
 			case 2: {												//"2. Upravit existujici film"
 				Scanner scan = new Scanner(System.in);
@@ -284,7 +291,7 @@ public class Program {
 			
 			case 3: {																		//"3. Smazat film"
 				Scanner scan = new Scanner(System.in);
-				Production remove = FindProduct(scan,database);
+				Production remove = FindProduct(scan, database);
 				if (remove !=null)
 				{
 					if (database.DelProduction(remove.getID()) != false) 
@@ -296,21 +303,11 @@ public class Program {
 				}
 			case 4: {																		//"4.Vlozit hodnoceni"
 				Scanner scan = new Scanner(System.in);
-				Production insertFeedback = FindProduct(scan,database);
-				if (insertFeedback !=null)
-				{
-					System.out.println("Hodnoceni:");
-					for (Feedback feedback : insertFeedback.getFeedback()) {
-						System.out.println(feedback.toString());
-					}
-					System.out.println("Zadejte hodnoceni 1-"+ insertFeedback.getMaxfeedback() +" a komentar:");
-					insertFeedback.setFeedback(OnlyByte(scan), scan.next());
-																	// tady sem skoncil, vlozit hodnoceni, nova trida Feedback
-				}
+				InsertFeedback(scan, database);
 				break;
 			}
 			case 5: {																		//"5. Vypis filmu"
-				database.PrintDatabase();
+				database.PrintAllDatabase();
 					
 				break;
 				}
@@ -392,19 +389,48 @@ public class Program {
 		}
 	}
 	
-	public static Production FindProduct(Scanner sc, Database database)
+	public static Production FindProduct(Scanner scan,Database database)
 	{
-		if (database.PrintDatabase())
+		if (database.PrintDatabaseIOnlyName())
 		{
 			System.out.println("Zadejte nazev filmu:");
-			
-			return database.FindByName(sc.nextLine());
+			return database.FindByName(scan.nextLine());
 		}
 		else
 		{
 			return null;
 		}
 	}
+	
+	public static void InsertFeedback(Scanner scan, Database database)
+	{
+		Production insertFeedback = FindProduct(scan, database);
+		if (insertFeedback !=null)
+		{
+			System.out.println("Hodnoceni:");
+			for (Feedback feedback : insertFeedback.getFeedback()) {
+				System.out.println(feedback.toString());
+			}
+			System.out.println("Zadejte ciselne hodnoceni 1-"+ insertFeedback.getMaxfeedback());
+			boolean condition=false;
+			byte number=0;
+			while (!condition)
+			{
+				 number=OnlyByte(scan);
+				if (0 < number && number <= insertFeedback.getMaxfeedback() )
+				{
+					condition=true;
+				}
+				else System.out.println("Zadejte hodnoceni pouze v danem rozsahu:");
+			}  
+
+			System.out.println("Zadejte komentar:");
+			String comment = scan.nextLine();
+			insertFeedback.setFeedback(number,comment);
+			
+		}
+	}
+	
 	
 	
 

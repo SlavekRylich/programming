@@ -8,8 +8,8 @@ public class Film extends Production{
 	private static final long serialVersionUID = 1L;
 	private final static byte MAXFEEDBACK = 5;
 	
-	public Film(String name, short yearOfPublication,byte feedback) {
-		super(name, yearOfPublication, feedback);
+	public Film(String name, short yearOfPublication) {
+		super(name, yearOfPublication);
 		
 	}
 	

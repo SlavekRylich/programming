@@ -14,8 +14,8 @@ public class Anime extends Production {
 	
 
 	
-	public Anime(String name, short yearOfPublication,byte feedback, byte age) {
-		super(name, yearOfPublication, feedback);
+	public Anime(String name, short yearOfPublication, byte age) {
+		super(name, yearOfPublication);
 		this.setAge(age);
 	}
 	

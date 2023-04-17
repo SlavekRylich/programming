@@ -20,16 +20,16 @@ public class Database {
 		this.databaseItems = databaseItems;
 	}
 	
-	public int addFilm(String name,short year,byte feedback)
+	public int addFilm(String name,short year)
 	{
-		Production newItem = new Film(name, year, feedback);
+		Production newItem = new Film(name, year);
 		databaseItems.put(ID++, newItem);
 		return ID - 1 ;
 	}
 	
-	public int addAnime(String name, short year,byte feedback, byte age)
+	public int addAnime(String name, short year, byte age)
 	{
-		Production newItem = new Anime(name, year, feedback, age);
+		Production newItem = new Anime(name, year, age);
 		databaseItems.put(ID++, newItem);
 		return ID - 1 ;
 	}
@@ -45,7 +45,23 @@ public class Database {
 		return databaseItems.get(ID);
 	}
 	
-	public boolean PrintDatabase()
+	public boolean PrintDatabaseIOnlyName()
+	{
+		if (databaseItems.size() != 0)
+		{
+			for (Integer item: databaseItems.keySet()) {
+			    String key = item.toString();
+			    String value = databaseItems.get(item).toString();
+			    System.out.println(key + " " + value);
+			}
+			return true;
+		}
+		else {
+			System.out.println("V databazi neni zadany zadny film");
+			return false;
+		}
+	}
+	public boolean PrintAllDatabase()
 	{
 		if (databaseItems.size() != 0)
 		{
