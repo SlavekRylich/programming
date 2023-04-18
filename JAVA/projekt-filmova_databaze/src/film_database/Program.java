@@ -2,6 +2,7 @@ package film_database;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -154,10 +155,9 @@ public class Program {
 							
 							System.out.println("Zadat animatory:");
 							System.out.println("Ano (y)\n Ne (n)");
-							var opt = scan.next();
-							
-							
 							while (!run)
+							{
+								var opt = scan.next();
 								switch (opt) {
 								case "y": 
 									System.out.println("Kolik animatoru chcete zadat:");
@@ -174,6 +174,7 @@ public class Program {
 								default:
 									System.out.println("Zadejte pouze y nebo n");
 								}
+							}
 							
 							break;
 						}
@@ -233,11 +234,7 @@ public class Program {
 								break;
 							case 2:
 								System.out.println("Index Jmeno Prijmeni");
-								for (Iterator<Human> iterator = change.getActors().iterator(); iterator.hasNext();) 
-								{
-									String string = (iterator.next().getFullNameWithID());
-									System.out.println(string);
-								}
+								change.PrintActorsWithID();
 								System.out.println("Ktereho chcete zmenit? (index):");
 								int choice=OnlyInt(scan);
 								change.deleteActor(choice);
@@ -246,11 +243,7 @@ public class Program {
 								break;
 							case 3:
 								System.out.println("Index Jmeno Prijmeni");
-								for (Iterator<Human> iterator = change.getActors().iterator(); iterator.hasNext();) 
-								{
-									String string = (iterator.next().getFullNameWithID());
-									System.out.println(string);
-								}
+								change.PrintActorsWithID();
 								System.out.println("Ktereho chcete zmenit? (index):");
 								choice=OnlyInt(scan);
 								change.deleteActor(choice);
@@ -312,7 +305,10 @@ public class Program {
 				break;
 				}
 			case 6: {																		//"6. Vyhledat film"
-				Sort(pruductionsList);  // sort the list
+				Scanner scan = new Scanner(System.in);
+
+				//Sort(pruductionsList);  // sort the list
+				database.Find(scan, database);   // tu som skoncil, vyladit vyhledavani
 				break;
 				}
 			case 7: {																		//"7. Vypis hercu nebo animatoru ucinkujicich ve vice filmech"
@@ -325,10 +321,10 @@ public class Program {
 				}
 			case 9: {																		//"9. Ulozit film do souboru"
 				Scanner scan = new Scanner(System.in);
-				PrintProductions(pruductionsList);
+				//PrintProductions(pruductionsList);
 				System.out.println("Zadejte nazev filmu, ktery chcete ulozit");
-				int select = Find(scan,pruductionsList);
-				System.out.println(select);
+				//int select = Find(scan,pruductionsList);
+				//System.out.println(select);
 				break;
 				}
 			case 10: {																		//"10. Nacteni filmu ze souboru"
@@ -354,39 +350,19 @@ public class Program {
 		
 	} // end of main 
 	
-	public static void PrintProductions(List<Production> pruductionsList) {
-		int i=1;
-		for (var piece: pruductionsList) {
-			System.out.println(i + ". " + piece.getName());
-			i++;
-		}
-	}
 	
-	public static <T> int Find(Scanner scan, List<Production> list)  // neni dodelane
-	{
-		Collections.sort(list,(o1, o2) -> (o1.getName().compareTo(o2.getName())));  // sort list by Name
-		
-		int count=0;
-		for ( Production iterable_element : list) {
-			if (scan.nextLine() == iterable_element.getName()) 
-			{
-				list.contains(iterable_element.getName());
-				return count;
-			}
-			System.out.println(iterable_element.getName());
-			count++;
-		}
-		return 0;
-	}
-	public static void Sort(List<Production> list)
+	
+	public static void Sort(Database database)
 	{
 		int count=0;
-		Collections.sort(list,(o1, o2) -> (o1.getName().compareTo(o2.getName())));  // sort list by Name
-		for ( Production iterable_element : list) {
+		//Collections.sort(feedbackArray,(o1, o2) -> (o1.getName().compareTo(o2.getName())));  // sort list by Name
+		//for (iterable_type iterable_element : database.) {
 			
-			System.out.println(iterable_element.getName());
-			count++;
-		}
+		//}
+		//for ( Feedback element : feedbackArray) {
+		//	System.out.println(element.getName());
+		//	count++;
+		//}
 	}
 	
 	public static Production FindProduct(Scanner scan,Database database)
@@ -430,6 +406,7 @@ public class Program {
 			
 		}
 	}
+	
 	
 	
 	

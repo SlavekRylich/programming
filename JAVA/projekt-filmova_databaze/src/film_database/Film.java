@@ -15,7 +15,7 @@ public class Film extends Production{
 	
 	@Override
 	public String toString() {
-		return "film:   " + super.getName();
+		return "film   " + super.getName();
 	}
 	
 
@@ -27,6 +27,13 @@ public class Film extends Production{
 	public void addActor(String name, String surname) {
 		super.effectives.add(new Actor(name,surname));
 	}
+
+	@Override
+	public byte getAge() {
+		return 0;
+	}
+
+	
 	
 	
 

@@ -2,6 +2,7 @@ package film_database;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class Production implements Serializable{
@@ -13,9 +14,6 @@ public abstract class Production implements Serializable{
 	protected int ID=1;
 	private String name;
 	private Human director;
-	//private ArrayList<String> comment;
-	//private int commentCounter=0;
-	//private ArrayList<Byte> feed;
 	private ArrayList<Feedback> feedback = new ArrayList<>();
 	private short yearOfPublication;
 	protected ArrayList<Human> effectives;
@@ -70,6 +68,18 @@ public abstract class Production implements Serializable{
 	public ArrayList<Human> getActors() {
 		return effectives;
 	}
+	public void PrintListActors()
+	{
+		for (Human human : effectives) {
+			System.out.print(human.getFullName() + ",");
+		}
+	}
+	public void PrintActorsWithID()
+	{
+		for (Human human : effectives) {
+			System.out.println(human.getFullNameWithID());
+		}
+	}
 
 	public void addActor(String name, String surname) {}
 	
@@ -100,6 +110,13 @@ public abstract class Production implements Serializable{
 		return null;
 	}
 	
+	public void SortFeedback()
+	{
+		
+		feedback.sort((o1, o2) -> (o1.getNumber().compareTo(o2.getNumber())));
+	}
+	
 	public abstract byte getMaxfeedback();
+	public abstract byte getAge();
 	
 }

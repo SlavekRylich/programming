@@ -7,9 +7,7 @@ public class Anime extends Production {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
 	private final static byte MAXFEEDBACK = 10;
-	
 	private byte age;
 	
 
@@ -21,7 +19,7 @@ public class Anime extends Production {
 	
 	@Override
 	public String toString() {
-		return "animak: " + super.getName();	
+		return "animak  " + super.getName();	
 		}
 
 
@@ -29,6 +27,7 @@ public class Anime extends Production {
 		return MAXFEEDBACK;
 	}
 
+	@Override
 	public byte getAge() {
 		return age;
 	}

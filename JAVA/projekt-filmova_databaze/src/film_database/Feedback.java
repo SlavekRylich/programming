@@ -23,7 +23,7 @@ public class Feedback {
 		this.comment = comment;
 	}
 
-	public int getNumber() {
+	public Integer getNumber() {
 		return number;
 	}
 
