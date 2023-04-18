@@ -121,10 +121,12 @@ public class Program {
 							ID = database.addFilm(name, year);
 							System.out.println("Zadat herce:");
 							System.out.println("Ano (y)\n Ne (n)");
-							var opt = scan.next();
+							String opt=null;
 							boolean run=false;
 							
 							while (!run)
+							{
+								 opt= scan.next();
 								switch (opt) {
 								case "y": 
 									
@@ -142,6 +144,7 @@ public class Program {
 								default:
 									System.out.println("Zadejte pouze y nebo n");
 								}
+							}
 							break;
 						}
 						case 2:
@@ -307,8 +310,16 @@ public class Program {
 			case 6: {																		//"6. Vyhledat film"
 				Scanner scan = new Scanner(System.in);
 
-				//Sort(pruductionsList);  // sort the list
-				database.Find(scan, database);   // tu som skoncil, vyladit vyhledavani
+				
+				Production product =  database.Find(scan, database);  					 // tu som skoncil, vyladit vyhledavani
+				if (product != null)
+				{
+					System.out.println("Nazev: " + product.getName()+ "\nReziser: "+product.getDirector()+"\nRok vydani: "+ product.getYearOfPublication());
+					product.SortFeedback();
+					product.PrintListActors();
+					product.PrintFeedback();
+				}
+				else System.out.println("Nic nenalezeno");
 				break;
 				}
 			case 7: {																		//"7. Vypis hercu nebo animatoru ucinkujicich ve vice filmech"
@@ -351,20 +362,6 @@ public class Program {
 	} // end of main 
 	
 	
-	
-	public static void Sort(Database database)
-	{
-		int count=0;
-		//Collections.sort(feedbackArray,(o1, o2) -> (o1.getName().compareTo(o2.getName())));  // sort list by Name
-		//for (iterable_type iterable_element : database.) {
-			
-		//}
-		//for ( Feedback element : feedbackArray) {
-		//	System.out.println(element.getName());
-		//	count++;
-		//}
-	}
-	
 	public static Production FindProduct(Scanner scan,Database database)
 	{
 		if (database.PrintDatabaseIOnlyName())
@@ -383,10 +380,7 @@ public class Program {
 		Production insertFeedback = FindProduct(scan, database);
 		if (insertFeedback !=null)
 		{
-			System.out.println("Hodnoceni:");
-			for (Feedback feedback : insertFeedback.getFeedback()) {
-				System.out.println(feedback.toString());
-			}
+			insertFeedback.PrintFeedback();
 			System.out.println("Zadejte ciselne hodnoceni 1-"+ insertFeedback.getMaxfeedback());
 			boolean condition=false;
 			byte number=0;

@@ -134,14 +134,14 @@ public class Database {
 		}
 	}
 	
-	public Production Find(Scanner scan, Database database)  // neni dodelane
+	public Production Find(Scanner scan, Database database) 
 	{
-		//Collections.sort(list,(o1, o2) -> (o1.getName().compareTo(o2.getName())));  // sort list by Name
-		System.out.println("Zadejte nazev:");
+		System.out.println("Zadejte vyraz:");
 		
 		int count=0;
 		String name = null;
 		String string = scan.nextLine();
+		System.out.println("Nalezeno:");
 		for (Integer item: databaseItems.keySet()) {
 			var key = item.toString();
 			name = databaseItems.get(item).getName();
@@ -149,33 +149,16 @@ public class Database {
 			if ( condition > -1)
 			{
 			    count++;
-			    System.out.println(name);
+			    System.out.println("- " +name);
 			}
 			
 		}
 		if (count != 0) 
 			{
-				System.out.println("Ktery ste meli na mysli:");
+				System.out.println("Vyberte film:");
 				return FindByName(scan.nextLine());
 			}
-//		else System.out.println("Nenalezeno");
-//		condition= (name.indexOf(scan.nextLine()));
-//		if ( condition > -1)
-//		{
-//			Production production = databaseItems.get(item);
-//			production.SortFeedback();
-//			System.out.println("Hodnocei komentar");
-//			for (var feedback : production.getFeedback()) {
-//				System.out.println(feedback.toString());
-//			}
-//		    count++;
-//		}
-//		else System.out.println("Nenalezeno");
-		/*
-		 * for ( Production iterable_element : databaseItems.) { if (scan.nextLine() ==
-		 * iterable_element.getName()) { list.contains(iterable_element.getName());
-		 * return null; } System.out.println(iterable_element.getName()); count++; }
-		 */
+		 
 		return null;
 	}
 }  // end of database class

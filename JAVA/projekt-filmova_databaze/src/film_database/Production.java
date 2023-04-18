@@ -2,6 +2,7 @@ package film_database;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -112,8 +113,15 @@ public abstract class Production implements Serializable{
 	
 	public void SortFeedback()
 	{
-		
 		feedback.sort((o1, o2) -> (o1.getNumber().compareTo(o2.getNumber())));
+		Collections.reverse(feedback);
+	}
+	public void PrintFeedback()
+	{
+		System.out.println("Hodnoceni:");
+		for (Feedback feedback : feedback) {
+			System.out.println(feedback.toString());
+		}
 	}
 	
 	public abstract byte getMaxfeedback();
