@@ -74,6 +74,7 @@ public abstract class Production implements Serializable{
 		for (Human human : effectives) {
 			System.out.print(human.getFullName() + ",");
 		}
+		System.out.println();
 	}
 	public void PrintActorsWithID()
 	{

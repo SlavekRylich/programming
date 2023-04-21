@@ -161,5 +161,46 @@ public class Database {
 		 
 		return null;
 	}
-}  // end of database class
+	
+	public void FindHuman()
+	{
+		if (databaseItems.size() != 0)
+		{
+			for (Integer item1: databaseItems.keySet()) {
+			    String key1 = item1.toString();
+			    Production value1 = databaseItems.get(item1);
+			    for (Human effectives_element1 : value1.effectives) {
+			    	
+			    	for (Integer item2: databaseItems.keySet()) {
+					    String key2 = item2.toString();
+					    Production value2 = databaseItems.get(item2);
+					    System.out.println(value1.getName()+ " vs " + value2.getName()+": ");
+					    
+					    if (!value1.getName().equals(value2.getName()))
+					    {
+					    	for (Human effectives_element2 : value2.effectives) {
+						    	if (effectives_element2.getFullName().equals(effectives_element1.getFullName()))
+						    	{
+							    	System.out.println("shoda");
+						    	
+						    	}
+						    	System.out.println(effectives_element1 +" vs " +effectives_element2);
+					    	}
+					    }
+					    else continue;
+						
+					}
+					
+				}
+			    
+			}
+			return;
+		}
+		else {
+			System.out.println("V databazi neni zadany zadny film");
+			return;
+		}
+	}
 
+
+}  // end of database class

@@ -309,8 +309,6 @@ public class Program {
 				}
 			case 6: {																		//"6. Vyhledat film"
 				Scanner scan = new Scanner(System.in);
-
-				
 				Production product =  database.Find(scan, database);  					 // tu som skoncil, vyladit vyhledavani
 				if (product != null)
 				{
@@ -323,7 +321,7 @@ public class Program {
 				break;
 				}
 			case 7: {																		//"7. Vypis hercu nebo animatoru ucinkujicich ve vice filmech"
-				
+				database.FindHuman();
 				break;
 				}
 			case 8: {																		//"8. Vypis vsech filmu podle ucinkovani daneho herce nebo animatora"
@@ -332,7 +330,7 @@ public class Program {
 				}
 			case 9: {																		//"9. Ulozit film do souboru"
 				Scanner scan = new Scanner(System.in);
-				//PrintProductions(pruductionsList);
+				//PrintProductions(pruductionsList); 
 				System.out.println("Zadejte nazev filmu, ktery chcete ulozit");
 				//int select = Find(scan,pruductionsList);
 				//System.out.println(select);
@@ -400,6 +398,8 @@ public class Program {
 			
 		}
 	}
+	
+	//public void List
 	
 	
 	
