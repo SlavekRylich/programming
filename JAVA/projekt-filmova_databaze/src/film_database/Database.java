@@ -1,10 +1,17 @@
 package film_database;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Database {
+import javax.xml.crypto.Data;
 
+public class Database implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	private int ID=1;
 	private HashMap<Integer, Production> databaseItems;
 	
@@ -97,7 +104,6 @@ public class Database {
 	public Production FindByName(String word)
 	{
 		for (Integer item: databaseItems.keySet()) {
-		    var key = item.toString();
 		    String name = databaseItems.get(item).getName();
 		    if (name.equals(word))
 		    {
@@ -143,7 +149,6 @@ public class Database {
 		String string = scan.nextLine();
 		System.out.println("Nalezeno:");
 		for (Integer item: databaseItems.keySet()) {
-			var key = item.toString();
 			name = databaseItems.get(item).getName();
 			int condition= (name.indexOf(string));
 			if ( condition > -1)
@@ -164,6 +169,8 @@ public class Database {
 	
 	public void FindHuman()
 	{
+		int jump=0;
+		
 		if (databaseItems.size() != 0)
 		{
 			for (Integer item1: databaseItems.keySet()) {
@@ -178,22 +185,24 @@ public class Database {
 					    
 					    if (!value1.getName().equals(value2.getName()))
 					    {
+					    	
 					    	for (Human effectives_element2 : value2.effectives) {
 						    	if (effectives_element2.getFullName().equals(effectives_element1.getFullName()))
 						    	{
 							    	System.out.println("shoda");
-						    	
 						    	}
 						    	System.out.println(effectives_element1 +" vs " +effectives_element2);
 					    	}
+					    	
 					    }
 					    else continue;
 						
 					}
 					
 				}
-			    
+			    jump++;
 			}
+			System.out.println(jump);
 			return;
 		}
 		else {
@@ -202,5 +211,51 @@ public class Database {
 		}
 	}
 
+//	private static int getDifferenceBetweenTwoArray(int[] array1 , int[] array2)
+//	{
+//	    int differenceCount = 0;
+//	    //if you dont want to sort your original arrays, create temporary arrays
+//	    int temp1[] = Arrays.copyOf(array1 , array1.length);
+//	    int temp2[] = Arrays.copyOf(array2 , array2.length);
+//	    Arrays.sort(temp1);
+//	    Arrays.sort(temp2);
+//
+//	    for(Integer i : temp1)
+//	    {
+//	        if(Arrays.binarySearch(temp2, i) < 0)
+//	            differenceCount++;
+//	    }
+//	    for(Integer i: temp2)
+//	    {
+//	        if(Arrays.binarySearch(temp1, i) < 0)
+//	            differenceCount++;
+//	    }   
+//
+//	    return differenceCount;
+//	}
+	
+	public void SaveToFile()
+	{
+		for (Integer item : databaseItems.keySet()) {
+			FileWriter fw = null; BufferedWriter out = null;
+			try {
+			fw = new FileWriter(databaseItems.get(item).getName().trim() +".txt");
+			out = new BufferedWriter(fw);
+			for (int i=0;i<10;i++){
+				System.out.println("Zadej jmeno:");
+				byte []data = new byte[100];
+				System.in.read(data);
+				out.write(new String("Jmeno je: " + data));
+				out.newLine();
+				}
+			} catch (IOException e) {
+			System.out.println("Soubor nelze otevøít");
+			} finally {
+			out.close(); fw.close(); // nutno doimplementovat null check atd.
+			}
+			
+		}
+	}
 
+	
 }  // end of database class

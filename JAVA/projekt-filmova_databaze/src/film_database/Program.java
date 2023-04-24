@@ -1,10 +1,5 @@
 package film_database;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Scanner;
 
 public class Program {
@@ -59,7 +54,6 @@ public class Program {
 	
 	public static void main(String[] args) {
 		
-		List<Production> pruductionsList = new ArrayList<>();
 		int ID=0;
 		
 		Database database = new Database();
@@ -338,9 +332,11 @@ public class Program {
 				}
 			case 10: {																		//"10. Nacteni filmu ze souboru"
 				
+				
 				break;
 				}
 			case 11: {																		//"11. Ukonceni programu"
+				
 				System.out.println();	
 				System.out.println("konec programu...");
 				}
