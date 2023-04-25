@@ -1,5 +1,7 @@
 package film_database;
 
+import film_database.Human.Type;
+
 public class Anime extends Production {
 
 
@@ -38,7 +40,11 @@ public class Anime extends Production {
 	
 	@Override
 	public void addActor(String name, String surname) {
-		super.effectives.add(new Animator(name,surname));
+		super.effectives.add(new Human(name,surname, Type.Animator));
 	}
 
+	@Override
+	public String getType() {
+		return "Anime";
+	}
 }

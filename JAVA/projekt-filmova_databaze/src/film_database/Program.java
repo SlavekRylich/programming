@@ -1,5 +1,6 @@
 package film_database;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Program {
@@ -52,11 +53,12 @@ public class Program {
 
 
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		int ID=0;
 		
 		Database database = new Database();
+		
 		
 		Scanner sc = new Scanner(System.in);
 		int option=0;
@@ -323,15 +325,19 @@ public class Program {
 				break;
 				}
 			case 9: {																		//"9. Ulozit film do souboru"
-				Scanner scan = new Scanner(System.in);
+				//Scanner scan = new Scanner(System.in);
 				//PrintProductions(pruductionsList); 
-				System.out.println("Zadejte nazev filmu, ktery chcete ulozit");
+				
+				database.SaveToFile();
+				//System.out.println("Zadejte nazev filmu, ktery chcete ulozit");
+				
 				//int select = Find(scan,pruductionsList);
 				//System.out.println(select);
+				
 				break;
 				}
 			case 10: {																		//"10. Nacteni filmu ze souboru"
-				
+				database.LoadFromFiles();
 				
 				break;
 				}

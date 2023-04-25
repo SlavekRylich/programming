@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import film_database.Human.Type;
+
 public abstract class Production implements Serializable{
 	/**
 	 * 
@@ -82,7 +84,10 @@ public abstract class Production implements Serializable{
 		}
 	}
 
-	public void addActor(String name, String surname) {}
+	public void addActor(String name, String surname) 
+	{
+		
+	}
 	
 	public void deleteActor(int id)
 	{
@@ -95,7 +100,7 @@ public abstract class Production implements Serializable{
 		return this.director.getFullName();
 	}
 	public void setDirector(String name, String surname) {
-		this.director = new Director(name, surname);
+		this.director = new Human(name, surname, Type.Director);
 	}
 	public Human FindByID(int number)
 	{
@@ -124,7 +129,10 @@ public abstract class Production implements Serializable{
 		}
 	}
 	
+	public abstract String getType();
+	
 	public abstract byte getMaxfeedback();
 	public abstract byte getAge();
+	
 	
 }

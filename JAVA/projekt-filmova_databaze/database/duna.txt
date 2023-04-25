@@ -1,0 +1,7 @@
+ID: 1 
+Typ: Film 
+Nazev: duna
+Reziser: a a
+Rok: 2022
+Ucinkujici: 
+Hodnoceni: 

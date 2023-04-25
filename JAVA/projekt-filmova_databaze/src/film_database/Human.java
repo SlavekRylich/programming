@@ -1,33 +1,44 @@
 package film_database;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Human {
+public  class Human {
 	private static final AtomicInteger count = new AtomicInteger(0); 
 	private int ID=1;
 	private String name;
 	private String surname;
-	//private String fullName;
-	private ArrayList<Production> productions;
-	private ArrayList<Production> artworks;
+	private Set<Production> productions;
+	private Type type;
 	
-	public Human(String name, String surname) {
+	public enum Type {
+		Director,
+		Actor,
+		Animator
+	}
+	
+	public Human(String name, String surname,Type type) {
 		ID = count.incrementAndGet();
 		this.setName(name);
 		this.setSurname(surname);
-		productions = new ArrayList<>();
-		setArtworks(new ArrayList<>());
+		productions = new HashSet<>();
+		this.type=type;
 	}
 
-	public ArrayList<Production> getPruductions() {
+	public Set<Production> getPruductions() {
 		return productions;
 	}
 
-	public void setPruductions(ArrayList<Production> pruductions) {
-		this.productions = pruductions;
+	public void setPruductions(Set<Production> productions) {
+		this.productions = productions;
 	}
 
+	public void addProductions(Production production)
+	{
+		productions.add(production);
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -51,14 +62,6 @@ public class Human {
 	public void setID(int ID) {
 		this.ID = ID;
 	}
-
-	public ArrayList<Production> getArtworks() {
-		return artworks;
-	}
-
-	public void setArtworks(ArrayList<Production> artworks) {
-		this.artworks = artworks;
-	}
 	
 	public String getFullName()
 	{
@@ -69,6 +72,11 @@ public class Human {
 	{
 		return this.getID()+ " " + this.getName() + " " + this.getSurname();
 	}
+
+	public Type getType() {
+		return type;
+	}
+	
 	
 	
 	

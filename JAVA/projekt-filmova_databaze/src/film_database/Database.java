@@ -1,13 +1,17 @@
 package film_database;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Set;
 
-import javax.xml.crypto.Data;
 
 public class Database implements Serializable{
 
@@ -169,40 +173,53 @@ public class Database implements Serializable{
 	
 	public void FindHuman()
 	{
-		int jump=0;
+		int shoda=0;
+		ArrayList<Production> temp = new ArrayList<>();
+		Set<Human> hs;
 		
 		if (databaseItems.size() != 0)
 		{
+			
 			for (Integer item1: databaseItems.keySet()) {
-			    String key1 = item1.toString();
-			    Production value1 = databaseItems.get(item1);
-			    for (Human effectives_element1 : value1.effectives) {
-			    	
+			    Production film1 = databaseItems.get(item1);
+			    temp.add(film1);
+			    
+			    for (int i = 0; i < film1.effectives.size(); i++) {
+					Human actor1 = film1.effectives.get(i);
+					
+				
 			    	for (Integer item2: databaseItems.keySet()) {
-					    String key2 = item2.toString();
-					    Production value2 = databaseItems.get(item2);
-					    System.out.println(value1.getName()+ " vs " + value2.getName()+": ");
+					    Production film2 = databaseItems.get(item2);
 					    
-					    if (!value1.getName().equals(value2.getName()))
+					    			
+					    if (temp.contains(film2))
+					    	continue;
+					    if (!film1.getName().equals(film2.getName()))
 					    {
 					    	
-					    	for (Human effectives_element2 : value2.effectives) {
-						    	if (effectives_element2.getFullName().equals(effectives_element1.getFullName()))
+					    	for (int j = 0; j < film2.effectives.size(); j++) {
+								Human actor2 = film2.effectives.get(j);
+								
+						    	if (actor2.getFullName().equals(actor1.getFullName()))
 						    	{
-							    	System.out.println("shoda");
+						    		actor1.addProductions(film1);
+						    		actor1.addProductions(film2);
+							    	System.out.println("shoda: " + actor1.getFullName() + " - " + film1.getName() + " - " + film2.getName());
+							    	shoda++;
 						    	}
-						    	System.out.println(effectives_element1 +" vs " +effectives_element2);
+						    
 					    	}
 					    	
 					    }
-					    else continue;
+					    
 						
 					}
 					
 				}
-			    jump++;
+			    
+			    
 			}
-			System.out.println(jump);
+			System.out.println(shoda);
 			return;
 		}
 		else {
@@ -211,51 +228,173 @@ public class Database implements Serializable{
 		}
 	}
 
-//	private static int getDifferenceBetweenTwoArray(int[] array1 , int[] array2)
-//	{
-//	    int differenceCount = 0;
-//	    //if you dont want to sort your original arrays, create temporary arrays
-//	    int temp1[] = Arrays.copyOf(array1 , array1.length);
-//	    int temp2[] = Arrays.copyOf(array2 , array2.length);
-//	    Arrays.sort(temp1);
-//	    Arrays.sort(temp2);
-//
-//	    for(Integer i : temp1)
-//	    {
-//	        if(Arrays.binarySearch(temp2, i) < 0)
-//	            differenceCount++;
-//	    }
-//	    for(Integer i: temp2)
-//	    {
-//	        if(Arrays.binarySearch(temp1, i) < 0)
-//	            differenceCount++;
-//	    }   
-//
-//	    return differenceCount;
-//	}
 	
-	public void SaveToFile()
+	public void SaveToFile() throws IOException
 	{
-		for (Integer item : databaseItems.keySet()) {
-			FileWriter fw = null; BufferedWriter out = null;
-			try {
-			fw = new FileWriter(databaseItems.get(item).getName().trim() +".txt");
-			out = new BufferedWriter(fw);
-			for (int i=0;i<10;i++){
-				System.out.println("Zadej jmeno:");
-				byte []data = new byte[100];
-				System.in.read(data);
-				out.write(new String("Jmeno je: " + data));
-				out.newLine();
+		File directory = new File(System.getProperty("user.dir") + File.separator +"database");
+		if (directory.exists())
+		{
+			
+			for (Integer item : databaseItems.keySet()) {
+				FileWriter fw = null; BufferedWriter out = null;
+				
+				File file = new File(directory.getName()+ File.separator + databaseItems.get(item).getName().trim() +".txt");
+				fw = new FileWriter(file);
+				out = new BufferedWriter(fw);
+				
+				try {
+				 	out.write(new String("ID: " + databaseItems.get(item).getID() + " \n"
+				 			+ "Typ: "+ databaseItems.get(item).getType() + " \n"
+				 			+ "Nazev: "+ databaseItems.get(item).getName() + "\n"
+				 			+ "Reziser: "+ databaseItems.get(item).getDirector() + "\n"
+				 			+ "Rok: "+ databaseItems.get(item).getYearOfPublication() + "\n"));
+				 	
+				 	if (databaseItems.get(item).getClass() == Anime.class) {
+				 		out.write(new String("Doporuceny vek: " + databaseItems.get(item).getAge() + "\n")); }
+				 	
+				 	out.write(new String("Ucinkujici: "));
+				 	for (Human film : databaseItems.get(item).getActors()) {
+						out.write(new String( film.getFullName() + ", " ));
+					}
+				 	
+					 	out.write(new String("\nHodnoceni: "));
+					 	for (Feedback feedback : databaseItems.get(item).getFeedback()) {
+						out.write(new String(  "\n" +feedback.getNumber() + " - " + feedback.getComment()));
+					}
+				 	}
+				
+				catch (IOException e) {
+				System.out.println("Soubor nelze otevøít");
+				} 
+				
+				finally {
+				out.close(); fw.close();
 				}
-			} catch (IOException e) {
-			System.out.println("Soubor nelze otevøít");
-			} finally {
-			out.close(); fw.close(); // nutno doimplementovat null check atd.
+				
+			}
+		}
+		else 
+		{
+			directory.mkdir();
+			SaveToFile();
+		}
+		
+	}
+
+	public void LoadFromFiles() throws IOException
+	{
+		File directory = new File(System.getProperty("user.dir") + File.separator +"database");
+		
+		if (directory.exists())
+		{
+			
+			for (File file : directory.listFiles()) {
+				
+				FileReader fr = null; BufferedReader in = null;
+				String oddelovac ="[ :] " ;
+				String radek;
+				String [] castiTextu;
+				int id= 0;
+				int idx=0;
+				String name = null;
+				short year=0;
+				String type=null;
+				String directorName=null;
+				String directorSurame=null;
+				byte age=0;
+				
+				fr = new FileReader(file);
+				in = new BufferedReader(fr);
+				
+				//ID
+				radek = in.readLine();
+				castiTextu = radek.split(oddelovac);
+				id = Integer.parseInt(castiTextu[1].trim());
+
+				//Type
+				radek = in.readLine();
+				castiTextu = radek.split(oddelovac);
+				type=castiTextu[1].trim();
+				
+				//Name
+				radek = in.readLine();
+				castiTextu = radek.split(oddelovac);
+				name=castiTextu[1].trim();
+				
+				
+				//Reziser
+				radek = in.readLine();
+				castiTextu = radek.split(oddelovac);
+				String[] splitDirectorName = castiTextu[1].split(" ");
+				directorName=splitDirectorName[0].trim();
+				directorSurame=splitDirectorName[1].trim();
+				
+				//Year
+				radek = in.readLine();
+				castiTextu = radek.split(oddelovac);
+				year=Short.parseShort(castiTextu[1]);
+				
+				
+				if (type.equalsIgnoreCase("Film"))
+				{
+					idx = addFilm(name, year);
+				}
+				
+				else 
+				{
+					//Age
+					radek = in.readLine();
+					castiTextu = radek.split(oddelovac);
+					age=Byte.parseByte(castiTextu[1]);
+					idx = addAnime(name, year, age);
+				}
+				
+				//Director
+				getProduction(idx).setDirector(directorName, directorSurame);
+				getProduction(idx).setID(id);
+				
+				//Actors
+				radek = in.readLine();
+				castiTextu = radek.split(oddelovac);
+				String splitActors = ",";			//  brad pitt, tom hanks, ade adel, 
+				String splitNames = " ";			//brad pitt 
+				
+				if ()              // dodelat, kdyt nejsou zadani herci (jakoze nemusi) tak aby to fungovalo i takto
+				for (String s : castiTextu[1].split(splitActors))
+				{
+					
+					String []string = s.trim().split(splitNames);
+					if (string.length > 1) {
+						getProduction(idx).addActor(string[0], string[1]); }
+					
+				}
+				
+				//Feedbacks
+				radek = in.readLine();
+				while ((radek = in.readLine()) != null)
+				{
+					castiTextu = radek.split(" - ");
+					getProduction(idx).setFeedback(Byte.parseByte(castiTextu[0].trim()), castiTextu[1].trim());
+				}
+					in.close(); 
+					fr.close();
 			}
 			
 		}
+		else 
+		{
+			System.out.println("Adresar: \"" + System.getProperty("user.dir") + File.separator +"database"+"\" - nenalezen");
+		}
+	 
 	}
 
+	public void ClearDatabaseFile()
+	{
+		File directory = new File(System.getProperty("user.dir") + File.separator +"database");
+		if (directory.exists())
+		{
+			
+		}
+	}
 	
 }  // end of database class
