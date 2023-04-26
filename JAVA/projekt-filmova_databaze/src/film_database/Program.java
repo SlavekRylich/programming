@@ -130,7 +130,7 @@ public class Program {
 									int cnt = OnlyInt(scan); 
 									for (int i = 0; i < cnt; i++) {
 										System.out.println("Zadejte jmeno a prijmeni " + (i + 1) + ". herce:");
-										database.getProduction(ID).addActor(scan.next(), scan.next());
+										database.getProduction(ID).addActor(database.addHuman(scan.next(), scan.next(),database.getProduction(ID)));
 									}
 									run=true;
 									break;
@@ -163,7 +163,7 @@ public class Program {
 									int cnt = OnlyInt(scan);
 									for (int i = 0; i < cnt; i++) {
 										System.out.println("Zadejte jmeno a prijmeni " + (i+1) + ". animatora:");
-										database.getProduction(ID).addActor(scan.next(), scan.next());
+										database.getProduction(ID).addActor(database.addHuman(scan.next(), scan.next(),database.getProduction(ID)));
 									}
 									run=true;
 									break;
@@ -181,10 +181,10 @@ public class Program {
 							System.out.println("Zadejte pouze z nabidky");
 							break;
 					}
-					
-					database.getProduction(ID).setDirector(directorName,directorSurname);
+					database.getProduction(ID).setDirector(database.addHuman(directorName, directorSurname,database.getProduction(ID)));
 					break;
 				}
+			
 			case 2: {												//"2. Upravit existujici film"
 				Scanner scan = new Scanner(System.in);
 				Production change = FindProduct(scan,database);
@@ -216,7 +216,7 @@ public class Program {
 							break;
 						case 2:
 							System.out.println(change.getDirector() +" - Upravit na: ");
-							change.setDirector(scan.next(),scan.next());
+							change.setDirector(database.addHuman(scan.next(),scan.next(), change));
 							break;
 						case 3:
 							System.out.println(change.getYearOfPublication() +" - Upravit na: ");
@@ -229,7 +229,7 @@ public class Program {
 							switch (OnlyInt(scan)) {
 							case 1:
 								System.out.println("Zadejte jmeno a prijmeni:");
-								change.addActor(scan.next(), scan.next());
+								change.addActor(database.addHuman(scan.next(),scan.next(), change));
 								break;
 							case 2:
 								System.out.println("Index Jmeno Prijmeni");
@@ -238,7 +238,7 @@ public class Program {
 								int choice=OnlyInt(scan);
 								change.deleteActor(choice);
 								System.out.println("Zadejte jmeno a prijmeni noveho:");
-								change.addActor(scan.next(), scan.next());
+								change.addActor(database.addHuman(scan.next(),scan.next(), change));
 								break;
 							case 3:
 								System.out.println("Index Jmeno Prijmeni");

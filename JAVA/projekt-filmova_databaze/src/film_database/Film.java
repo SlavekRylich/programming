@@ -1,7 +1,5 @@
 package film_database;
 
-import film_database.Human.Type;
-
 public class Film extends Production{
 
 	/**
@@ -26,8 +24,9 @@ public class Film extends Production{
 	}
 	
 	@Override
-	public void addActor(String name, String surname) {
-		super.effectives.add(new Human(name,surname, Type.Actor));
+	public Human addActor(Human human) {
+		super.effectives.put(human,Role.Actor);
+		return human;
 	}
 
 	@Override

@@ -12,58 +12,86 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
 
+import film_database.Human.Type;
+
 
 public class Database implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private int ID=1;
-	private HashMap<Integer, Production> databaseItems;
+	private int filmID=1;
+	private int humanID=1;
+	private HashMap<Integer, Production> databaseFilms;
+	private HashMap<Integer, Human> databaseHuman;
+	
 	
 	public Database() 
 	{
-		setDatabaseItems(new HashMap<Integer, Production>());
+		setDatabaseFilms(new HashMap<Integer, Production>());
+		setDatabaseHuman(new HashMap<Integer, Human>());
 	}
 
 	public HashMap<Integer, Production> getDatabaseItems() {
-		return databaseItems;
+		return databaseFilms;
 	}
 
-	public void setDatabaseItems(HashMap<Integer, Production> databaseItems) {
-		this.databaseItems = databaseItems;
+	public void setDatabaseFilms(HashMap<Integer, Production> databaseItems) {
+		this.databaseFilms = databaseItems;
 	}
 	
 	public int addFilm(String name,short year)
 	{
 		Production newItem = new Film(name, year);
-		databaseItems.put(ID++, newItem);
-		return ID - 1 ;
+		databaseFilms.put(filmID++, newItem);
+		return filmID - 1 ;
 	}
 	
 	public int addAnime(String name, short year, byte age)
 	{
 		Production newItem = new Anime(name, year, age);
-		databaseItems.put(ID++, newItem);
-		return ID - 1 ;
+		databaseFilms.put(filmID++, newItem);
+		return filmID - 1 ;
+	}
+	
+	public Human addHuman(String name, String surname, Production film) {
+		
+		
+		for (Integer item: databaseHuman.keySet()) {									
+		    
+		    if (databaseHuman.get(item).getFullName().equals(name + " " + surname))
+		    {
+		    	databaseHuman.get(item).addProductions(film);
+		    	return databaseHuman.get(item);
+		    }
+		    
+		}
+		Human human = new Human(name,surname,film, null);
+		databaseHuman.put(humanID++, human) ;
+		return human;
 	}
 	
 	public boolean DelProduction(Integer productKey)
 	{
 		
-		return databaseItems.remove(productKey) != null;
+		return databaseFilms.remove(productKey) != null;
 	}
 	
 	public Production getProduction(int ID)
 	{
-		return databaseItems.get(ID);
+		return databaseFilms.get(ID);
+	}
+	
+	public Human getHuman(int ID)
+	{
+		return databaseHuman.get(ID);
 	}
 	
 	public boolean PrintDatabaseIOnlyName()
 	{
-		if (databaseItems.size() != 0)
+		if (databaseFilms.size() != 0)
 		{
-			for (Integer item: databaseItems.keySet()) {
+			for (Integer item: databaseFilms.keySet()) {
 			    String key = item.toString();
-			    String value = databaseItems.get(item).toString();
+			    String value = databaseFilms.get(item).toString();
 			    System.out.println(key + " " + value);
 			}
 			return true;
@@ -75,17 +103,17 @@ public class Database implements Serializable{
 	}
 	public boolean PrintAllDatabase()
 	{
-		if (databaseItems.size() != 0)
+		if (databaseFilms.size() != 0)
 		{
 		    System.out.println("     Typ     Nazev          Reziser             Rok vydani   Doporuceny vek");
-			for (Integer item: databaseItems.keySet()) {
+			for (Integer item: databaseFilms.keySet()) {
 			    String toStr = item.toString();
-			    String name = databaseItems.get(item).toString();
-			    String director = databaseItems.get(item).getDirector();
-			    short year = databaseItems.get(item).getYearOfPublication();
-			    short age = databaseItems.get(item).getAge();
+			    String name = databaseFilms.get(item).toString();
+			    String director = databaseFilms.get(item).getDirector();
+			    short year = databaseFilms.get(item).getYearOfPublication();
+			    short age = databaseFilms.get(item).getAge();
 
-			    if (databaseItems.get(item).getClass() == Anime.class)
+			    if (databaseFilms.get(item).getClass() == Anime.class)
 			    {
 			    	System.out.println(toStr + "    " + name + "       " + director + "             " + year + "          " + age);
 				    System.out.print("Seznam animatoru:");
@@ -95,7 +123,7 @@ public class Database implements Serializable{
 				    System.out.println(toStr + "    " + name + "         " + director + "             " + year);
 				    System.out.print("Seznam hercu:");
 			    }
-			    databaseItems.get(item).PrintListActors();
+			    databaseFilms.get(item).PrintListActors();
 			    System.out.println();
 			}
 			return true;
@@ -107,11 +135,11 @@ public class Database implements Serializable{
 	}
 	public Production FindByName(String word)
 	{
-		for (Integer item: databaseItems.keySet()) {
-		    String name = databaseItems.get(item).getName();
+		for (Integer item: databaseFilms.keySet()) {
+		    String name = databaseFilms.get(item).getName();
 		    if (name.equals(word))
 		    {
-		    	return databaseItems.get(item);
+		    	return databaseFilms.get(item);
 		    }
 		}
 		System.out.println("Film nenalezen");
@@ -119,21 +147,21 @@ public class Database implements Serializable{
 	}
 
 	public int getID() {
-		return ID;
+		return filmID;
 	}
 
 	public void setID(int iD) {
-		this.ID = iD;
+		this.filmID = iD;
 	}
 	public boolean Sort()
 	{
-		if (databaseItems.size() != 0)
+		if (databaseFilms.size() != 0)
 		{
-			for (Integer item: databaseItems.keySet()) {
+			for (Integer item: databaseFilms.keySet()) {
 			    String key = item.toString();
-			    databaseItems.get(item).SortFeedback();
+			    databaseFilms.get(item).SortFeedback();
 			    
-			    String value = databaseItems.get(item).toString();
+			    String value = databaseFilms.get(item).toString();
 			    System.out.println(key + " " + value);
 			}
 			return true;
@@ -152,8 +180,8 @@ public class Database implements Serializable{
 		String name = null;
 		String string = scan.nextLine();
 		System.out.println("Nalezeno:");
-		for (Integer item: databaseItems.keySet()) {
-			name = databaseItems.get(item).getName();
+		for (Integer item: databaseFilms.keySet()) {
+			name = databaseFilms.get(item).getName();
 			int condition= (name.indexOf(string));
 			if ( condition > -1)
 			{
@@ -177,19 +205,20 @@ public class Database implements Serializable{
 		ArrayList<Production> temp = new ArrayList<>();
 		Set<Human> hs;
 		
-		if (databaseItems.size() != 0)
+		if (databaseFilms.size() != 0)
 		{
 			
-			for (Integer item1: databaseItems.keySet()) {
-			    Production film1 = databaseItems.get(item1);
+			for (Integer item1: databaseFilms.keySet()) {
+			    Production film1 = databaseFilms.get(item1);
 			    temp.add(film1);
 			    
-			    for (int i = 0; i < film1.effectives.size(); i++) {
-					Human actor1 = film1.effectives.get(i);
+			    for (Human actor1 : film1.effectives.keySet()) {
 					
 				
-			    	for (Integer item2: databaseItems.keySet()) {
-					    Production film2 = databaseItems.get(item2);
+					
+				
+			    	for (Integer item2: databaseFilms.keySet()) {
+					    Production film2 = databaseFilms.get(item2);
 					    
 					    			
 					    if (temp.contains(film2))
@@ -197,8 +226,9 @@ public class Database implements Serializable{
 					    if (!film1.getName().equals(film2.getName()))
 					    {
 					    	
-					    	for (int j = 0; j < film2.effectives.size(); j++) {
-								Human actor2 = film2.effectives.get(j);
+					    	for (Human actor2 : film2.effectives.keySet()) {
+								
+							
 								
 						    	if (actor2.getFullName().equals(actor1.getFullName()))
 						    	{
@@ -235,30 +265,30 @@ public class Database implements Serializable{
 		if (directory.exists())
 		{
 			
-			for (Integer item : databaseItems.keySet()) {
+			for (Integer item : databaseFilms.keySet()) {
 				FileWriter fw = null; BufferedWriter out = null;
 				
-				File file = new File(directory.getName()+ File.separator + databaseItems.get(item).getName().trim() +".txt");
+				File file = new File(directory.getName()+ File.separator + databaseFilms.get(item).getName().trim() +".txt");
 				fw = new FileWriter(file);
 				out = new BufferedWriter(fw);
 				
 				try {
-				 	out.write(new String("ID: " + databaseItems.get(item).getID() + " \n"
-				 			+ "Typ: "+ databaseItems.get(item).getType() + " \n"
-				 			+ "Nazev: "+ databaseItems.get(item).getName() + "\n"
-				 			+ "Reziser: "+ databaseItems.get(item).getDirector() + "\n"
-				 			+ "Rok: "+ databaseItems.get(item).getYearOfPublication() + "\n"));
+				 	out.write(new String("ID: " + databaseFilms.get(item).getID() + " \n"
+				 			+ "Typ: "+ databaseFilms.get(item).getType() + " \n"
+				 			+ "Nazev: "+ databaseFilms.get(item).getName() + "\n"
+				 			+ "Reziser: "+ databaseFilms.get(item).getDirector() + "\n"
+				 			+ "Rok: "+ databaseFilms.get(item).getYearOfPublication() + "\n"));
 				 	
-				 	if (databaseItems.get(item).getClass() == Anime.class) {
-				 		out.write(new String("Doporuceny vek: " + databaseItems.get(item).getAge() + "\n")); }
+				 	if (databaseFilms.get(item).getClass() == Anime.class) {
+				 		out.write(new String("Doporuceny vek: " + databaseFilms.get(item).getAge() + "\n")); }
 				 	
 				 	out.write(new String("Ucinkujici: "));
-				 	for (Human film : databaseItems.get(item).getActors()) {
+				 	for (Human film : databaseFilms.get(item).getActors().keySet()) {
 						out.write(new String( film.getFullName() + ", " ));
 					}
 				 	
 					 	out.write(new String("\nHodnoceni: "));
-					 	for (Feedback feedback : databaseItems.get(item).getFeedback()) {
+					 	for (Feedback feedback : databaseFilms.get(item).getFeedback()) {
 						out.write(new String(  "\n" +feedback.getNumber() + " - " + feedback.getComment()));
 					}
 				 	}
@@ -350,7 +380,8 @@ public class Database implements Serializable{
 				}
 				
 				//Director
-				getProduction(idx).setDirector(directorName, directorSurame);
+				
+				getProduction(idx).setDirector(addHuman(directorName, directorSurame, getProduction(idx)));
 				getProduction(idx).setID(id);
 				
 				//Actors
@@ -359,13 +390,16 @@ public class Database implements Serializable{
 				String splitActors = ",";			//  brad pitt, tom hanks, ade adel, 
 				String splitNames = " ";			//brad pitt 
 				
-				if ()              // dodelat, kdyt nejsou zadani herci (jakoze nemusi) tak aby to fungovalo i takto
+				//if ()              // dodelat, kdyt nejsou zadani herci (jakoze nemusi) tak aby to fungovalo i takto
 				for (String s : castiTextu[1].split(splitActors))
 				{
 					
 					String []string = s.trim().split(splitNames);
 					if (string.length > 1) {
-						getProduction(idx).addActor(string[0], string[1]); }
+						
+						getProduction(idx).addActor(addHuman(string[0], string[1], getProduction(idx))); 
+						
+						}
 					
 				}
 				
@@ -395,6 +429,14 @@ public class Database implements Serializable{
 		{
 			
 		}
+	}
+
+	public HashMap<Integer, Human> getDatabaseHuman() {
+		return databaseHuman;
+	}
+
+	public void setDatabaseHuman(HashMap<Integer, Human> databaseHuman) {
+		this.databaseHuman = databaseHuman;
 	}
 	
 }  // end of database class

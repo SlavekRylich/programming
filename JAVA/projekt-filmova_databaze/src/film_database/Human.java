@@ -18,12 +18,13 @@ public  class Human {
 		Animator
 	}
 	
-	public Human(String name, String surname,Type type) {
+	public Human(String name, String surname,Production film,Type type) {
 		ID = count.incrementAndGet();
 		this.setName(name);
 		this.setSurname(surname);
 		productions = new HashSet<>();
 		this.type=type;
+		productions.add(film);
 	}
 
 	public Set<Production> getPruductions() {
@@ -37,6 +38,10 @@ public  class Human {
 	public void addProductions(Production production)
 	{
 		productions.add(production);
+	}
+	public void rmProductions(Production production)
+	{
+		productions.remove(production);
 	}
 	
 	public String getName() {
@@ -65,18 +70,38 @@ public  class Human {
 	
 	public String getFullName()
 	{
-		return this.getName() + " " + this.getSurname();
+		return name + " " + surname;
 	}
 	
 	public String getFullNameWithID()
 	{
-		return this.getID()+ " " + this.getName() + " " + this.getSurname();
+		return this.getID()+ " " + name + " " + surname;
 	}
 
 	public Type getType() {
 		return type;
 	}
 	
+
+	@Override
+	public boolean equals(Object obj) {
+		if ((obj!=null)&&(obj instanceof Human)){
+			if ((this.name+this.surname)==((Human)obj).getName()+((Human)obj).getSurname())
+				return true;
+		}
+		return false;
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return name + " " + surname;
+	}
+	
+	public Human getHuman()
+	{
+		return this;
+	}
 	
 	
 	

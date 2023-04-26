@@ -3,14 +3,20 @@ package film_database;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import film_database.Human.Type;
 
 public abstract class Production implements Serializable{
-	/**
-	 * 
-	 */
+
+	public enum Role {		// tady sem skoncil u rozdeleni zda je to herec, animator ci reziser
+		Director,
+		Actor,
+		Animator
+	}
+	
+	
 	private static final long serialVersionUID = 1L;
 	private static final AtomicInteger count = new AtomicInteger(0); 
 	protected int ID=1;
@@ -18,13 +24,13 @@ public abstract class Production implements Serializable{
 	private Human director;
 	private ArrayList<Feedback> feedback = new ArrayList<>();
 	private short yearOfPublication;
-	protected ArrayList<Human> effectives;
+	protected HashMap<Human, Role> effectives;
 	
 	public Production(String name, short yearOfPublication)	{
 		ID = count.incrementAndGet();
 		this.name=name;
 		this.yearOfPublication=yearOfPublication;
-		effectives = new ArrayList<>();
+		effectives = new HashMap<Human, Role>();
 		
 	}
 
@@ -67,27 +73,25 @@ public abstract class Production implements Serializable{
 	}
 
 
-	public ArrayList<Human> getActors() {
+	public HashMap<Human, Role> getActors() {
 		return effectives;
 	}
+	
 	public void PrintListActors()
 	{
-		for (Human human : effectives) {
-			System.out.print(human.getFullName() + ",");
+		for (Human item : effectives.keySet()) {
+			System.out.print(item.getFullName() + ",");
 		}
 		System.out.println();
 	}
 	public void PrintActorsWithID()
 	{
-		for (Human human : effectives) {
-			System.out.println(human.getFullNameWithID());
+		for (Human item : effectives.keySet()) {
+			System.out.println(item.getFullNameWithID());
 		}
 	}
 
-	public void addActor(String name, String surname) 
-	{
-		
-	}
+	public abstract Human addActor(Human human);
 	
 	public void deleteActor(int id)
 	{
@@ -95,16 +99,18 @@ public abstract class Production implements Serializable{
 		effectives.remove(human);
 	}
 	
+	
 	public String getDirector()
 	{
 		return this.director.getFullName();
 	}
-	public void setDirector(String name, String surname) {
-		this.director = new Human(name, surname, Type.Director);
+	public Human setDirector(Human human) {
+		director= human;
+		return director;
 	}
 	public Human FindByID(int number)
 	{
-		for (var item: effectives) 
+		for (var item: effectives.keySet()) 
 		{
 			int id = item.getID();
 			
