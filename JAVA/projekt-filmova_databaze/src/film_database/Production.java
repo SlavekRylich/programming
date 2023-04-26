@@ -6,11 +6,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import film_database.Human.Type;
-
 public abstract class Production implements Serializable{
 
-	public enum Role {		// tady sem skoncil u rozdeleni zda je to herec, animator ci reziser
+	public enum Role {		
 		Director,
 		Actor,
 		Animator
@@ -91,7 +89,7 @@ public abstract class Production implements Serializable{
 		}
 	}
 
-	public abstract Human addActor(Human human);
+	public abstract Human addActor(Human human,Production production);
 	
 	public void deleteActor(int id)
 	{
@@ -106,6 +104,7 @@ public abstract class Production implements Serializable{
 	}
 	public Human setDirector(Human human) {
 		director= human;
+		new HumanRole(this, human, HumanRole.Role.Director);
 		return director;
 	}
 	public Human FindByID(int number)
@@ -139,6 +138,14 @@ public abstract class Production implements Serializable{
 	
 	public abstract byte getMaxfeedback();
 	public abstract byte getAge();
+
+
+	@Override
+	public String toString() {
+		return name;
+	}
+
+	
 	
 	
 }

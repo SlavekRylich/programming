@@ -10,9 +10,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Set;
-
-import film_database.Human.Type;
 
 
 public class Database implements Serializable{
@@ -20,7 +17,7 @@ public class Database implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int filmID=1;
 	private int humanID=1;
-	private HashMap<Integer, Production> databaseFilms;
+	private HashMap<Integer, Production> databaseFilms;	
 	private HashMap<Integer, Human> databaseHuman;
 	
 	
@@ -40,15 +37,33 @@ public class Database implements Serializable{
 	
 	public int addFilm(String name,short year)
 	{
-		Production newItem = new Film(name, year);
-		databaseFilms.put(filmID++, newItem);
+		for (Integer item: databaseFilms.keySet()) {
+			
+			if (databaseFilms.get(item).getName().equals(name))
+			{
+				System.out.println("Film jiz exituje");
+				return -1;
+			}
+			
+		}
+		
+		databaseFilms.put(filmID++, new Film(name, year));
 		return filmID - 1 ;
 	}
 	
 	public int addAnime(String name, short year, byte age)
 	{
-		Production newItem = new Anime(name, year, age);
-		databaseFilms.put(filmID++, newItem);
+		for (Integer item: databaseFilms.keySet()) {
+			
+			if (databaseFilms.get(item).getName().equals(name))
+			{
+				System.out.println("Film jiz exituje");
+				return -1;
+			}
+			
+		}
+		
+		databaseFilms.put(filmID++, new Anime(name, year, age));
 		return filmID - 1 ;
 	}
 	
@@ -203,7 +218,6 @@ public class Database implements Serializable{
 	{
 		int shoda=0;
 		ArrayList<Production> temp = new ArrayList<>();
-		Set<Human> hs;
 		
 		if (databaseFilms.size() != 0)
 		{
@@ -391,16 +405,19 @@ public class Database implements Serializable{
 				String splitNames = " ";			//brad pitt 
 				
 				//if ()              // dodelat, kdyt nejsou zadani herci (jakoze nemusi) tak aby to fungovalo i takto
-				for (String s : castiTextu[1].split(splitActors))
+				if (castiTextu.length > 1)
 				{
-					
-					String []string = s.trim().split(splitNames);
-					if (string.length > 1) {
+					for (String s : castiTextu[1].split(splitActors))
+					{
 						
-						getProduction(idx).addActor(addHuman(string[0], string[1], getProduction(idx))); 
+						String []string = s.trim().split(splitNames);
+						if (string.length > 1) {
+							
+							getProduction(idx).addActor(addHuman(string[0], string[1], getProduction(idx)), getProduction(idx)); 
+							
+							}
 						
-						}
-					
+					}
 				}
 				
 				//Feedbacks

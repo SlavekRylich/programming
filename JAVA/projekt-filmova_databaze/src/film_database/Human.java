@@ -1,6 +1,8 @@
 package film_database;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -11,6 +13,7 @@ public  class Human {
 	private String surname;
 	private Set<Production> productions;
 	private Type type;
+	public static List<Object> instances = new ArrayList<>();
 	
 	public enum Type {
 		Director,
@@ -20,8 +23,9 @@ public  class Human {
 	
 	public Human(String name, String surname,Production film,Type type) {
 		ID = count.incrementAndGet();
+		instances.add(new java.lang.ref.WeakReference<>(this));
 		this.setName(name);
-		this.setSurname(surname);
+		this.setSurname(surname);	
 		productions = new HashSet<>();
 		this.type=type;
 		productions.add(film);
@@ -94,7 +98,6 @@ public  class Human {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return name + " " + surname;
 	}
 	
