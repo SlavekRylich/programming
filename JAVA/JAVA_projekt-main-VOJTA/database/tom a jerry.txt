@@ -1,0 +1,10 @@
+ID: 3 
+Typ: Anime 
+Nazev: tom a jerry
+Reziser: tomas dlhy
+Rok: 2000
+Doporuceny vek: 4
+Ucinkujici: tom cruise, brad pitt,
+Hodnoceni: 
+10 - slabota
+3 - pro decka dobre hej

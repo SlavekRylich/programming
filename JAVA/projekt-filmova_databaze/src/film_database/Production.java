@@ -3,16 +3,18 @@ package film_database;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import film_database.HumanRole.Role;
 
 public abstract class Production implements Serializable{
 
-	public enum Role {		
-		Director,
-		Actor,
-		Animator
-	}
+//	public enum Role {		
+//		Director,
+//		Actor,
+//		Animator
+//	}
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -22,13 +24,13 @@ public abstract class Production implements Serializable{
 	private Human director;
 	private ArrayList<Feedback> feedback = new ArrayList<>();
 	private short yearOfPublication;
-	protected HashMap<Human, Role> effectives;
+	//protected HashMap<Human, Role> effectives;
 	
 	public Production(String name, short yearOfPublication)	{
 		ID = count.incrementAndGet();
 		this.name=name;
 		this.yearOfPublication=yearOfPublication;
-		effectives = new HashMap<Human, Role>();
+		//effectives = new HashMap<Human, Role>();
 		
 	}
 
@@ -71,21 +73,58 @@ public abstract class Production implements Serializable{
 	}
 
 
-	public HashMap<Human, Role> getActors() {
-		return effectives;
+//	public HashMap<Human, Role> getActors() {
+//		return effectives;
+//	}
+//	
+	public List<Human> getActors()
+	{
+		List<Human> actors = new ArrayList<>();
+		
+		for (HumanRole item : HumanRole.instances) {
+			String name = item.getProduction().getName();
+			
+			if (name == this.name)
+			{
+				actors.add(item.getHuman());
+			}
+			
+		}
+		
+		return actors;
 	}
 	
 	public void PrintListActors()
 	{
-		for (Human item : effectives.keySet()) {
-			System.out.print(item.getFullName() + ",");
+		for (HumanRole item : HumanRole.instances) {
+			String name = item.getProduction().getName();
+			if (name == this.name)
+			{
+				String nameActor = item.getHuman().getFullName();
+				if (item.getRole() != Role.Director)
+				{
+					System.out.print(nameActor + ", ");
+				}
+			}
 		}
+		
 		System.out.println();
 	}
+	
 	public void PrintActorsWithID()
 	{
-		for (Human item : effectives.keySet()) {
-			System.out.println(item.getFullNameWithID());
+		for (HumanRole item : HumanRole.instances) {
+			String name = item.getProduction().getName();
+			if (name == this.name)
+			{
+				String nameActorWithID = item.getHuman().getFullNameWithID();
+				if (item.getRole() != Role.Director)
+				{
+					System.out.println(nameActorWithID);
+				}
+				
+			}
+			
 		}
 	}
 
@@ -93,8 +132,19 @@ public abstract class Production implements Serializable{
 	
 	public void deleteActor(int id)
 	{
-		Human human = FindByID(id);
-		effectives.remove(human);
+		for (HumanRole item : HumanRole.instances) {
+			String name = item.getProduction().getName();
+			if (name == this.name)
+			{
+				int actorID = item.getHuman().getID();
+				if (actorID == id)
+				{
+					item.deleteInstance(id);
+				}
+			}
+		}
+//		Human human = FindByID(id);
+//		effectives.remove(human);
 	}
 	
 	
@@ -107,17 +157,28 @@ public abstract class Production implements Serializable{
 		new HumanRole(this, human, HumanRole.Role.Director);
 		return director;
 	}
-	public Human FindByID(int number)
+	public Human FindByID(int id)
 	{
-		for (var item: effectives.keySet()) 
-		{
-			int id = item.getID();
-			
-			  if (id == number)
-			  {
-			  return item;
-			  }
+		for (HumanRole item : HumanRole.instances) {
+			String name = item.getProduction().getName();
+			if (name == this.name)
+			{
+				int actorID = item.getHuman().getID();
+				if (actorID == id)
+				{
+					return item.getHuman();
+				}
+			}
 		}
+//		for (var item: effectives.keySet()) 
+//		{
+//			int id = item.getID();
+//			
+//			  if (id == number)
+//			  {
+//			  return item;
+//			  }
+//		}
 		return null;
 	}
 	

@@ -67,19 +67,19 @@ public class Database implements Serializable{
 		return filmID - 1 ;
 	}
 	
-	public Human addHuman(String name, String surname, Production film) {
+	public Human addHuman(String name, String surname) {
 		
 		
 		for (Integer item: databaseHuman.keySet()) {									
 		    
 		    if (databaseHuman.get(item).getFullName().equals(name + " " + surname))
 		    {
-		    	databaseHuman.get(item).addProductions(film);
+		    	
 		    	return databaseHuman.get(item);
 		    }
 		    
 		}
-		Human human = new Human(name,surname,film, null);
+		Human human = new Human(name,surname);		//Human human = new Human(name,surname,film, null);
 		databaseHuman.put(humanID++, human) ;
 		return human;
 	}
@@ -226,7 +226,7 @@ public class Database implements Serializable{
 			    Production film1 = databaseFilms.get(item1);
 			    temp.add(film1);
 			    
-			    for (Human actor1 : film1.effectives.keySet()) {
+			    for (Human actor1 : film1.getActors()) {
 					
 				
 					
@@ -240,14 +240,14 @@ public class Database implements Serializable{
 					    if (!film1.getName().equals(film2.getName()))
 					    {
 					    	
-					    	for (Human actor2 : film2.effectives.keySet()) {
+					    	for (Human actor2 : film2.getActors()) {
 								
 							
 								
 						    	if (actor2.getFullName().equals(actor1.getFullName()))
 						    	{
-						    		actor1.addProductions(film1);
-						    		actor1.addProductions(film2);
+						    		//actor1.addProductions(film1);
+						    		//actor1.addProductions(film2);
 							    	System.out.println("shoda: " + actor1.getFullName() + " - " + film1.getName() + " - " + film2.getName());
 							    	shoda++;
 						    	}
@@ -297,8 +297,10 @@ public class Database implements Serializable{
 				 		out.write(new String("Doporuceny vek: " + databaseFilms.get(item).getAge() + "\n")); }
 				 	
 				 	out.write(new String("Ucinkujici: "));
-				 	for (Human film : databaseFilms.get(item).getActors().keySet()) {
-						out.write(new String( film.getFullName() + ", " ));
+				 	for (Human actor : databaseFilms.get(item).getActors()) {
+				 		
+						out.write(new String( actor.getFullName() + ", " ));
+						
 					}
 				 	
 					 	out.write(new String("\nHodnoceni: "));
@@ -395,7 +397,7 @@ public class Database implements Serializable{
 				
 				//Director
 				
-				getProduction(idx).setDirector(addHuman(directorName, directorSurame, getProduction(idx)));
+				getProduction(idx).setDirector(addHuman(directorName, directorSurame));
 				getProduction(idx).setID(id);
 				
 				//Actors
@@ -413,7 +415,7 @@ public class Database implements Serializable{
 						String []string = s.trim().split(splitNames);
 						if (string.length > 1) {
 							
-							getProduction(idx).addActor(addHuman(string[0], string[1], getProduction(idx)), getProduction(idx)); 
+							getProduction(idx).addActor(addHuman(string[0], string[1]), getProduction(idx)); 
 							
 							}
 						

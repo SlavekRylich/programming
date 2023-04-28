@@ -1,6 +1,13 @@
 package film_database;
 
+import film_database.Human.Type;
+
 public class Anime extends Production {
+
+
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	private final static byte MAXFEEDBACK = 10;
 	private byte age;
@@ -32,11 +39,9 @@ public class Anime extends Production {
 	}
 	
 	@Override
-	public Human addActor(Human human, Production production) {
-		//super.effectives.put(human,Role.Animator);
-		new HumanRole(production, human, HumanRole.Role.Animator);
-		return human;	
-		}
+	public void addActor(String name, String surname) {
+		super.effectives.add(new Human(name,surname, Type.Animator));
+	}
 
 	@Override
 	public String getType() {

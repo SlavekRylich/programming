@@ -1,6 +1,7 @@
 package film_database;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Program {
@@ -59,6 +60,16 @@ public class Program {
 		
 		Database database = new Database();
 		
+		//
+		//HashMap<Integer, Production> databaseItems;
+		//
+		
+		//pri prvnim spusteni se musi rucne zadata filmy a radne ukoncit aby se do databaze neco ulozilo
+		if (database.connect())
+		{
+			database.loadRecordsFromDatabase();
+			database.disconnect();
+		}
 		
 		Scanner sc = new Scanner(System.in);
 		int option=0;
@@ -115,8 +126,6 @@ public class Program {
 						{
 							
 							ID = database.addFilm(name, year);
-							if (ID == -1) break;
-							
 							System.out.println("Zadat herce:");
 							System.out.println("Ano (y)\n Ne (n)");
 							String opt=null;
@@ -132,7 +141,7 @@ public class Program {
 									int cnt = OnlyInt(scan); 
 									for (int i = 0; i < cnt; i++) {
 										System.out.println("Zadejte jmeno a prijmeni " + (i + 1) + ". herce:");
-										database.getProduction(ID).addActor(database.addHuman(scan.next(), scan.next()), database.getProduction(ID));
+										database.getProduction(ID).addActor(scan.next(), scan.next());
 									}
 									run=true;
 									break;
@@ -153,7 +162,6 @@ public class Program {
 							age = OnlyByte(scan);
 		
 							ID = database.addAnime(name,year, age);
-							if (ID == -1) break;
 							
 							System.out.println("Zadat animatory:");
 							System.out.println("Ano (y)\n Ne (n)");
@@ -166,7 +174,7 @@ public class Program {
 									int cnt = OnlyInt(scan);
 									for (int i = 0; i < cnt; i++) {
 										System.out.println("Zadejte jmeno a prijmeni " + (i+1) + ". animatora:");
-										database.getProduction(ID).addActor(database.addHuman(scan.next(), scan.next()), database.getProduction(ID));
+										database.getProduction(ID).addActor(scan.next(), scan.next());
 									}
 									run=true;
 									break;
@@ -184,12 +192,10 @@ public class Program {
 							System.out.println("Zadejte pouze z nabidky");
 							break;
 					}
-
-					if (ID == -1) break;
-					database.getProduction(ID).setDirector(database.addHuman(directorName, directorSurname));
+					
+					database.getProduction(ID).setDirector(directorName,directorSurname);
 					break;
 				}
-			
 			case 2: {												//"2. Upravit existujici film"
 				Scanner scan = new Scanner(System.in);
 				Production change = FindProduct(scan,database);
@@ -221,7 +227,7 @@ public class Program {
 							break;
 						case 2:
 							System.out.println(change.getDirector() +" - Upravit na: ");
-							change.setDirector(database.addHuman(scan.next(),scan.next()));
+							change.setDirector(scan.next(),scan.next());
 							break;
 						case 3:
 							System.out.println(change.getYearOfPublication() +" - Upravit na: ");
@@ -234,16 +240,16 @@ public class Program {
 							switch (OnlyInt(scan)) {
 							case 1:
 								System.out.println("Zadejte jmeno a prijmeni:");
-								change.addActor(database.addHuman(scan.next(),scan.next()) ,change);
+								change.addActor(scan.next(), scan.next());
 								break;
 							case 2:
 								System.out.println("Index Jmeno Prijmeni");
 								change.PrintActorsWithID();
 								System.out.println("Ktereho chcete zmenit? (index):");
 								int choice=OnlyInt(scan);
-								change.deleteActor(choice);														// vyresit odstraneni instance
+								change.deleteActor(choice);
 								System.out.println("Zadejte jmeno a prijmeni noveho:");
-								change.addActor(database.addHuman(scan.next(),scan.next()),change);
+								change.addActor(scan.next(), scan.next());
 								break;
 							case 3:
 								System.out.println("Index Jmeno Prijmeni");
@@ -325,8 +331,11 @@ public class Program {
 				database.FindHuman();
 				break;
 				}
-			case 8: {																		//"8. Vypis vsech filmu podle ucinkovani daneho herce nebo animatora"
+			case 8: {//"8. Vypis vsech filmu podle ucinkovani daneho herce nebo animatora"
 				
+				
+
+
 				break;
 				}
 			case 9: {																		//"9. Ulozit film do souboru"
@@ -350,6 +359,13 @@ public class Program {
 				
 				System.out.println();	
 				System.out.println("konec programu...");
+				
+				database.connect();
+				database.createTable();
+				database.deleteSQLDatabase();
+				database.insertRecords();
+				//database.selectAll();
+				database.disconnect();
 				}
 				end = true;
 				break;

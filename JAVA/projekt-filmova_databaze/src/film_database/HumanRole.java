@@ -1,14 +1,13 @@
 package film_database;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class HumanRole {
 
 	private static final AtomicInteger count = new AtomicInteger(0); 
-	private int ID=1;
-	public static List<Object> instances = new ArrayList<>();
+	private int ID=0;
+	public static ArrayList<HumanRole> instances = new ArrayList<>();
 	private Production production;
 	private Human human;
 	private Role role;
@@ -19,11 +18,12 @@ public class HumanRole {
 		Animator
 	}
 	
+	
 	public HumanRole(Production production, Human human, Role role)
 	{
-
+		instances.add(ID, this);
 		ID = count.incrementAndGet();
-		instances.add(new java.lang.ref.WeakReference<HumanRole>(this));
+		
 		this.setProduction(production);
 		this.setHuman(human);
 		this.role=role;
@@ -44,6 +44,14 @@ public class HumanRole {
 	public void setRole(Role role) {
 		this.role = role;
 	}
+	
+	public String printRole()
+	{
+		if (role == Role.Actor) return "herec";
+		if (role == Role.Animator) return "animator";
+		if (role == Role.Director) return "reziser";
+		else return null;
+	}
 
 	public Production getProduction() {
 		return production;
@@ -63,5 +71,8 @@ public class HumanRole {
 		return human.toString() + " " + production.getName() + " " + role;
 	}
 
+	public boolean deleteInstance(int ID) {
+		return HumanRole.instances.remove(ID) != null;			
+	}
 	
 }

@@ -1,6 +1,12 @@
 package film_database;
 
+import film_database.Human.Type;
+
 public class Film extends Production{
+
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	private final static byte MAXFEEDBACK = 5;
 	
@@ -20,10 +26,8 @@ public class Film extends Production{
 	}
 	
 	@Override
-	public Human addActor(Human human, Production production) {
-		//super.effectives.put(human,Role.Actor);
-		new HumanRole(production, human, HumanRole.Role.Actor);
-		return human;
+	public void addActor(String name, String surname) {
+		super.effectives.add(new Human(name,surname, Type.Actor));
 	}
 
 	@Override

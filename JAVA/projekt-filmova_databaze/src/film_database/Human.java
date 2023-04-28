@@ -11,42 +11,42 @@ public  class Human {
 	private int ID=1;
 	private String name;
 	private String surname;
-	private Set<Production> productions;
-	private Type type;
+	//private Set<Production> productions;
+	//private Type type;
 	public static List<Object> instances = new ArrayList<>();
 	
-	public enum Type {
-		Director,
-		Actor,
-		Animator
-	}
+//	public enum Type {
+//		Director,
+//		Actor,
+//		Animator
+//	}
 	
-	public Human(String name, String surname,Production film,Type type) {
+	public Human(String name, String surname) {		//public Human(String name, String surname,Production film,Type type) {
 		ID = count.incrementAndGet();
 		instances.add(new java.lang.ref.WeakReference<>(this));
 		this.setName(name);
 		this.setSurname(surname);	
-		productions = new HashSet<>();
-		this.type=type;
-		productions.add(film);
+		//productions = new HashSet<>();
+		//this.type=type;
+		//productions.add(film);
 	}
 
-	public Set<Production> getPruductions() {
-		return productions;
-	}
-
-	public void setPruductions(Set<Production> productions) {
-		this.productions = productions;
-	}
-
-	public void addProductions(Production production)
-	{
-		productions.add(production);
-	}
-	public void rmProductions(Production production)
-	{
-		productions.remove(production);
-	}
+//	public Set<Production> getPruductions() {
+//		return productions;
+//	}
+//
+//	public void setPruductions(Set<Production> productions) {
+//		this.productions = productions;
+//	}
+//
+//	public void addProductions(Production production)
+//	{
+//		productions.add(production);
+//	}
+//	public void rmProductions(Production production)
+//	{
+//		productions.remove(production);
+//	}
 	
 	public String getName() {
 		return name;
@@ -82,9 +82,9 @@ public  class Human {
 		return this.getID()+ " " + name + " " + surname;
 	}
 
-	public Type getType() {
-		return type;
-	}
+//	public Type getType() {
+//		return type;
+//	}
 	
 
 	@Override
