@@ -73,19 +73,4 @@ public class HumanRole {
 		return human.toString() + " " + production.getName() + " " + role;
 	}
 
-//	public boolean deleteInstance(int ID) {
-//		
-//		
-//		for (HumanRole humanRole : instances) {
-//			
-//			if (humanRole.getHuman().getID() == ID)
-//			{
-//				int id = humanRole.getID();
-//				return HumanRole.instances.remove(id) != null;
-//			}
-//		}
-//		
-//		return false;			
-//	}
-	
 }

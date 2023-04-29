@@ -131,7 +131,7 @@ public abstract class Production implements Serializable{
 
 	public abstract Human addActor(Human human,Production production);
 	
-	public void deleteActor(int id)
+	public boolean deleteActor(int id)
 	{
 		for (Iterator<HumanRole> iterator = HumanRole.instances.iterator(); iterator.hasNext(); ) {
 		    HumanRole value = iterator.next();
@@ -142,9 +142,11 @@ public abstract class Production implements Serializable{
 				if (actorID == id)
 				{
 			        iterator.remove();
+			        return true;
 			    }
 		    }
 		}
+		return false;
 //		Human human = FindByID(id);
 //		effectives.remove(human);
 	}

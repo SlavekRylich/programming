@@ -8,8 +8,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeMap;
 
 
 public class Database implements Serializable{
@@ -84,10 +91,27 @@ public class Database implements Serializable{
 		return human;
 	}
 	
-	public boolean DelProduction(Integer productKey)
+	public boolean deleteProduction(Integer productKey)
 	{
 		
-		return databaseFilms.remove(productKey) != null;
+		for (Integer item : databaseFilms.keySet()) {
+			int id = databaseFilms.get(item).getID();
+			if (id == productKey)
+			{
+				for (Iterator<HumanRole> iterator = HumanRole.instances.iterator(); iterator.hasNext(); ) {
+				    HumanRole value = iterator.next();
+				    int idx = value.getProduction().getID();
+				    if (id == idx)
+				    {
+				    	
+					        iterator.remove();
+					    
+				    }
+				}
+				return databaseFilms.remove(id) != null;
+			}
+		}
+		return false;
 	}
 	
 	public Production getProduction(int ID)
@@ -116,6 +140,7 @@ public class Database implements Serializable{
 			return false;
 		}
 	}
+	
 	public boolean PrintAllDatabase()
 	{
 		if (databaseFilms.size() != 0)
@@ -131,12 +156,12 @@ public class Database implements Serializable{
 			    if (databaseFilms.get(item).getClass() == Anime.class)
 			    {
 			    	System.out.println(toStr + "    " + name + "       " + director + "             " + year + "          " + age);
-				    System.out.print("Seznam animatoru:");
+				    System.out.print("Seznam animatoru: ");
 			    }
 			    else 
 			    {
 				    System.out.println(toStr + "    " + name + "         " + director + "             " + year);
-				    System.out.print("Seznam hercu:");
+				    System.out.print("Seznam hercu: ");
 			    }
 			    databaseFilms.get(item).PrintListActors();
 			    System.out.println();
@@ -148,6 +173,7 @@ public class Database implements Serializable{
 			return false;
 		}
 	}
+	
 	public Production FindByName(String word)
 	{
 		for (Integer item: databaseFilms.keySet()) {
@@ -161,6 +187,85 @@ public class Database implements Serializable{
 		return null;
 	}
 
+	public void FindHuman()
+	{
+		if (databaseHuman.size() != 0)
+		{
+			Scanner sc = new Scanner(System.in);
+			System.out.println("Zadejte vyraz:");
+			
+			int count=0;
+			String name = null;
+			String string = sc.nextLine();
+			System.out.println("Nalezeno:");
+			for (Integer item: databaseHuman.keySet()) {
+				name = databaseHuman.get(item).getFullName();
+				int condition= (name.indexOf(string));
+				if ( condition > -1)
+				{
+				    count++;
+				    System.out.println("- " +name);
+				}
+				
+			}
+			if (count != 0) 
+				{
+					System.out.println("Zadejte osobu:");
+					 FindProductionsByHuman(sc.nextLine());
+					 return;
+				}
+			 
+			return ;
+	
+		}
+		else {
+			System.out.println("V databazi neni zadana zadna osoba");
+			return;
+		}
+	}
+	public void FindProductionsByHuman(String findHuman)
+	{
+		if (databaseHuman.size() != 0)
+		{
+			Human human= null;
+			int humanId = 0; 
+			
+			for (Integer key : databaseHuman.keySet()) {
+				String name = databaseHuman.get(key).getFullName();
+				if (name.equals(findHuman))
+				{
+					human = databaseHuman.get(key);
+					humanId = human.getID();
+				}
+				
+			}
+			
+			if (HumanRole.instances.contains(HumanRole.instances.get(humanId)))) 
+			{
+				for (Iterator<HumanRole> iterator = HumanRole.instances.iterator(); iterator.hasNext(); ) {
+				    HumanRole value = iterator.next();
+				    String name = value.getHuman().getFullName();
+				   
+				    if (name.equals(findHuman))
+				    {
+					    System.out.println(value.getProduction().getName() + " - " + value.printRole());
+					    }
+				    }
+				return;
+			}
+			else 
+			{
+				System.out.println(human.getFullName() +" se nepodili na zadnem filmu");
+				return;
+			}
+		}
+		else {
+			System.out.println("V databazi neni zadana zadna osoba");
+			return;
+		}
+	}
+
+	
 	public int getID() {
 		return filmID;
 	}
@@ -168,6 +273,7 @@ public class Database implements Serializable{
 	public void setID(int iD) {
 		this.filmID = iD;
 	}
+	
 	public boolean Sort()
 	{
 		if (databaseFilms.size() != 0)
@@ -214,64 +320,70 @@ public class Database implements Serializable{
 		return null;
 	}
 	
-	public void FindHuman()
+	public   Map<Human, List<HumanRole>> FindHumanInMultipleFilms()
 	{
-		int shoda=0;
-		ArrayList<Production> temp = new ArrayList<>();
+		int i =0;
+		Set<HumanRole> list = null;
+		Map<Human, List<HumanRole>> dictionaryTemp = new HashMap<>();
+		
 		
 		if (databaseFilms.size() != 0)
 		{
+			ArrayList<HumanRole> copyInstances = HumanRole.instances;
 			
-			for (Integer item1: databaseFilms.keySet()) {
-			    Production film1 = databaseFilms.get(item1);
-			    temp.add(film1);
+			copyInstances.sort((o1, o2) -> (o1.getHuman().getFullName().compareTo(o2.getHuman().getFullName())));
+			//Collections.reverse(feedback);
+			
+			for (Iterator<HumanRole> iterator1 = copyInstances.iterator(); iterator1.hasNext(); ) {
+			    HumanRole film1 = iterator1.next();
+			    Human actor1 = film1.getHuman();
 			    
-			    for (Human actor1 : film1.getActors()) {
-					
-				
-					
-				
-			    	for (Integer item2: databaseFilms.keySet()) {
-					    Production film2 = databaseFilms.get(item2);
-					    
-					    			
-					    if (temp.contains(film2))
-					    	continue;
-					    if (!film1.getName().equals(film2.getName()))
+			    int j =0;
+			    list = new HashSet<>();
+			    for (Iterator<HumanRole> iterator2 = copyInstances.iterator(); iterator2.hasNext(); ) {
+				    HumanRole film2 = iterator2.next();
+				    Human actor2 = film2.getHuman();
+				    
+				    if (j>i)
+				    {
+				    	if (dictionaryTemp.containsKey(actor1)) break;
+				    	
+					    if (actor1.equals(actor2))
 					    {
-					    	
-					    	for (Human actor2 : film2.getActors()) {
-								
-							
-								
-						    	if (actor2.getFullName().equals(actor1.getFullName()))
-						    	{
-						    		//actor1.addProductions(film1);
-						    		//actor1.addProductions(film2);
-							    	System.out.println("shoda: " + actor1.getFullName() + " - " + film1.getName() + " - " + film2.getName());
-							    	shoda++;
-						    	}
-						    
-					    	}
+					    	list.add(film1);
+					    	list.add(film2);
 					    	
 					    }
 					    
-						
-					}
-					
+				    }
+				    j++;
+				    
 				}
-			    
+			    if (list.size()>0) 
+			    	{
+				    	List<HumanRole> sortedList = new ArrayList<>(list);
+				        sortedList.sort((o1, o2) -> (o1.getProduction().getName().compareTo(o2.getProduction().getName())));
+			    		dictionaryTemp.put(actor1,sortedList);
+			    	}
+			    i++;
 			    
 			}
-			System.out.println(shoda);
-			return;
+			
+			//tady sem zkousel aby se vypsali herci sezareni podle prijmeni
+			
+	        // TreeMap to store values of HashMap
+	        TreeMap<Human, List<HumanRole>> sorted = new TreeMap<>(dictionaryTemp);
+	 
+	        // Copy all data from hashMap into TreeMap
+	        sorted.putAll(dictionaryTemp);
+			
+			return sorted;
 		}
 		else {
 			System.out.println("V databazi neni zadany zadny film");
-			return;
+			return null;
 		}
 	}
-
 	
 	public void SaveToFile() throws IOException
 	{

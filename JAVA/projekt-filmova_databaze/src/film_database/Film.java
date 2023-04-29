@@ -11,7 +11,7 @@ public class Film extends Production{
 	
 	@Override
 	public String toString() {
-		return "film   " + super.getName();
+		return super.getName();
 	}
 	
 

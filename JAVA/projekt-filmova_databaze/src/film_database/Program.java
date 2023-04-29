@@ -1,7 +1,11 @@
 package film_database;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Program {
 	
@@ -230,7 +234,8 @@ public class Program {
 						case 4:
 							System.out.println("1: Pridat");				
 							System.out.println("2: Zmenit");				
-							System.out.println("3: Odebrat");							
+							System.out.println("3: Odebrat");
+							System.out.println("any: Zpet");
 							switch (OnlyInt(scan)) {
 							case 1:
 								System.out.println("Zadejte jmeno a prijmeni:");
@@ -253,7 +258,6 @@ public class Program {
 								change.deleteActor(choice);
 								break;
 							default:
-								System.out.println("Zadejte cisla pouze z nabidky");
 								break;
 							}
 							
@@ -291,7 +295,7 @@ public class Program {
 				Production remove = FindProduct(scan, database);
 				if (remove !=null)
 				{
-					if (database.DelProduction(remove.getID()) != false) 
+					if (database.deleteProduction(remove.getID()) != false) 
 					{
 						System.out.println("Uspesne smazano");
 					}
@@ -310,7 +314,7 @@ public class Program {
 				}
 			case 6: {																		//"6. Vyhledat film"
 				Scanner scan = new Scanner(System.in);
-				Production product =  database.Find(scan, database);  					 // tu som skoncil, vyladit vyhledavani
+				Production product =  database.Find(scan, database);  					 
 				if (product != null)
 				{
 					System.out.println("Nazev: " + product.getName()+ "\nReziser: "+product.getDirector()+"\nRok vydani: "+ product.getYearOfPublication());
@@ -322,11 +326,20 @@ public class Program {
 				break;
 				}
 			case 7: {																		//"7. Vypis hercu nebo animatoru ucinkujicich ve vice filmech"
-				database.FindHuman();
+				Map<Human, List<HumanRole>> map =  database.FindHumanInMultipleFilms();
+				for (Human item : map.keySet()) {
+					int i = 0;
+					for (var element : map.get(item)) {
+						if (i==0)	System.out.print(item.getFullName()+" ("+ map.get(item).size() + "x): ");
+						System.out.print(element.getProduction().getName() + " - " + element.printRole() +", ");
+						i++;
+					}
+					System.out.println();
+				}
 				break;
 				}
 			case 8: {																		//"8. Vypis vsech filmu podle ucinkovani daneho herce nebo animatora"
-				
+				database.FindHuman();
 				break;
 				}
 			case 9: {																		//"9. Ulozit film do souboru"
@@ -406,7 +419,6 @@ public class Program {
 		}
 	}
 	
-	//public void List
 	
 	
 	

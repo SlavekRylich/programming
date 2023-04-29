@@ -14,7 +14,7 @@ public class Anime extends Production {
 	
 	@Override
 	public String toString() {
-		return "animak  " + super.getName();	
+		return super.getName();	
 		}
 
 

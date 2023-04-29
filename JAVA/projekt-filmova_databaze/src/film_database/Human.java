@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public  class Human {
+public  class Human implements Comparable<Human>{
 	private static final AtomicInteger count = new AtomicInteger(0); 
 	private int ID=0;
 	private String name;
@@ -90,7 +90,7 @@ public  class Human {
 	@Override
 	public boolean equals(Object obj) {
 		if ((obj!=null)&&(obj instanceof Human)){
-			if ((this.name+this.surname)==((Human)obj).getName()+((Human)obj).getSurname())
+			if ((this.ID)==((Human)obj).getID())
 				return true;
 		}
 		return false;
@@ -105,7 +105,20 @@ public  class Human {
 	{
 		return this;
 	}
+
 	
+	@Override
+	public int compareTo(Human o)
+    {
+		// podle prijmeni
+//		String s1 =  this.surname+this.name;
+//        String s2 =  o.surname+o.name;
+		// podle jmena
+        String s1 =  this.name + this.surname;
+        String s2 =  o.name  + o.surname;
+        return s1.compareTo(s2);
+    }
+
 	
 	
 	
