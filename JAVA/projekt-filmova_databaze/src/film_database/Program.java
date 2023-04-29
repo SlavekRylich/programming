@@ -228,9 +228,9 @@ public class Program {
 							change.setYearOfPublication(scan.nextShort());
 							break;
 						case 4:
-							System.out.println("1: Pridat");				// potom vyresit podminku, kdyz pridam herce jestli podle jmena uz existuje tak se jen priradi
-							System.out.println("2: Zmenit");				// nebo se vytrvori novy Human
-							System.out.println("3: Odebrat");							// a zpetne reference - relace osob na filmy
+							System.out.println("1: Pridat");				
+							System.out.println("2: Zmenit");				
+							System.out.println("3: Odebrat");							
 							switch (OnlyInt(scan)) {
 							case 1:
 								System.out.println("Zadejte jmeno a prijmeni:");
@@ -241,14 +241,14 @@ public class Program {
 								change.PrintActorsWithID();
 								System.out.println("Ktereho chcete zmenit? (index):");
 								int choice=OnlyInt(scan);
-								change.deleteActor(choice);														// vyresit odstraneni instance
+								change.deleteActor(choice);														
 								System.out.println("Zadejte jmeno a prijmeni noveho:");
 								change.addActor(database.addHuman(scan.next(),scan.next()),change);
 								break;
 							case 3:
 								System.out.println("Index Jmeno Prijmeni");
 								change.PrintActorsWithID();
-								System.out.println("Ktereho chcete zmenit? (index):");
+								System.out.println("Ktereho chcete odebrat? (index):");
 								choice=OnlyInt(scan);
 								change.deleteActor(choice);
 								break;

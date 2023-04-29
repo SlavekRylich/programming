@@ -3,6 +3,7 @@ package film_database;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -132,16 +133,17 @@ public abstract class Production implements Serializable{
 	
 	public void deleteActor(int id)
 	{
-		for (HumanRole item : HumanRole.instances) {
-			String name = item.getProduction().getName();
-			if (name == this.name)
-			{
-				int actorID = item.getHuman().getID();
+		for (Iterator<HumanRole> iterator = HumanRole.instances.iterator(); iterator.hasNext(); ) {
+		    HumanRole value = iterator.next();
+		    String name = value.getProduction().getName();
+		    if (name == this.name)
+		    {
+			    int actorID = value.getHuman().getID();
 				if (actorID == id)
 				{
-					item.deleteInstance(id);
-				}
-			}
+			        iterator.remove();
+			    }
+		    }
 		}
 //		Human human = FindByID(id);
 //		effectives.remove(human);

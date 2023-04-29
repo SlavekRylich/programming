@@ -64,15 +64,28 @@ public class HumanRole {
 	public int getID() {
 		return ID;
 	}
+	public ArrayList<HumanRole> getInstances() {
+		return instances;
+	}
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return human.toString() + " " + production.getName() + " " + role;
 	}
 
-	public boolean deleteInstance(int ID) {
-		return HumanRole.instances.remove(ID) != null;			
-	}
+//	public boolean deleteInstance(int ID) {
+//		
+//		
+//		for (HumanRole humanRole : instances) {
+//			
+//			if (humanRole.getHuman().getID() == ID)
+//			{
+//				int id = humanRole.getID();
+//				return HumanRole.instances.remove(id) != null;
+//			}
+//		}
+//		
+//		return false;			
+//	}
 	
 }

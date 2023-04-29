@@ -8,12 +8,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public  class Human {
 	private static final AtomicInteger count = new AtomicInteger(0); 
-	private int ID=1;
+	private int ID=0;
 	private String name;
 	private String surname;
 	//private Set<Production> productions;
 	//private Type type;
-	public static List<Object> instances = new ArrayList<>();
+	public static List<Human> instances = new ArrayList<>();
 	
 //	public enum Type {
 //		Director,
@@ -22,8 +22,8 @@ public  class Human {
 //	}
 	
 	public Human(String name, String surname) {		//public Human(String name, String surname,Production film,Type type) {
+		instances.add(ID,this);
 		ID = count.incrementAndGet();
-		instances.add(new java.lang.ref.WeakReference<>(this));
 		this.setName(name);
 		this.setSurname(surname);	
 		//productions = new HashSet<>();
