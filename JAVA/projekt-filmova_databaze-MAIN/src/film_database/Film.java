@@ -21,7 +21,6 @@ public class Film extends Production{
 	
 	@Override
 	public Human addActor(Human human, Production production) {
-		//super.effectives.put(human,Role.Actor);
 		new HumanRole(production, human, HumanRole.Role.Actor);
 		return human;
 	}
@@ -35,9 +34,6 @@ public class Film extends Production{
 	public String getType() {
 		return "Film";
 	}
-	
-	
-	
 	
 
 }

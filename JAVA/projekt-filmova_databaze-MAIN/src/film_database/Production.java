@@ -11,11 +11,6 @@ import film_database.HumanRole.Role;
 
 public abstract class Production implements Serializable{
 
-//	public enum Role {		
-//		Director,
-//		Actor,
-//		Animator
-//	}
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -25,13 +20,13 @@ public abstract class Production implements Serializable{
 	private Human director;
 	private ArrayList<Feedback> feedback = new ArrayList<>();
 	private short yearOfPublication;
-	//protected HashMap<Human, Role> effectives;
+	
 	
 	public Production(String name, short yearOfPublication)	{
 		ID = count.incrementAndGet();
 		this.name=name;
 		this.yearOfPublication=yearOfPublication;
-		//effectives = new HashMap<Human, Role>();
+		
 		
 	}
 
@@ -73,11 +68,7 @@ public abstract class Production implements Serializable{
 		this.ID = ID;
 	}
 
-
-//	public HashMap<Human, Role> getActors() {
-//		return effectives;
-//	}
-//	
+	
 	public List<Human> getActors()
 	{
 		List<Human> actors = new ArrayList<>();
@@ -147,8 +138,6 @@ public abstract class Production implements Serializable{
 		    }
 		}
 		return false;
-//		Human human = FindByID(id);
-//		effectives.remove(human);
 	}
 	
 	
@@ -174,15 +163,6 @@ public abstract class Production implements Serializable{
 				}
 			}
 		}
-//		for (var item: effectives.keySet()) 
-//		{
-//			int id = item.getID();
-//			
-//			  if (id == number)
-//			  {
-//			  return item;
-//			  }
-//		}
 		return null;
 	}
 	

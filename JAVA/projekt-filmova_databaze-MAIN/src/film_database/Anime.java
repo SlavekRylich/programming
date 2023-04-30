@@ -33,7 +33,6 @@ public class Anime extends Production {
 	
 	@Override
 	public Human addActor(Human human, Production production) {
-		//super.effectives.put(human,Role.Animator);
 		new HumanRole(production, human, HumanRole.Role.Animator);
 		return human;	
 		}

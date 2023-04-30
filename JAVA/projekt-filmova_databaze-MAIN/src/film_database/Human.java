@@ -1,9 +1,7 @@
 package film_database;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public  class Human implements Comparable<Human>{
@@ -11,42 +9,18 @@ public  class Human implements Comparable<Human>{
 	private int ID=0;
 	private String name;
 	private String surname;
-	//private Set<Production> productions;
-	//private Type type;
 	public static List<Human> instances = new ArrayList<>();
+
+
 	
-//	public enum Type {
-//		Director,
-//		Actor,
-//		Animator
-//	}
-	
-	public Human(String name, String surname) {		//public Human(String name, String surname,Production film,Type type) {
+	public Human(String name, String surname) {		
 		instances.add(ID,this);
 		ID = count.incrementAndGet();
 		this.setName(name);
 		this.setSurname(surname);	
-		//productions = new HashSet<>();
-		//this.type=type;
-		//productions.add(film);
 	}
 
-//	public Set<Production> getPruductions() {
-//		return productions;
-//	}
-//
-//	public void setPruductions(Set<Production> productions) {
-//		this.productions = productions;
-//	}
-//
-//	public void addProductions(Production production)
-//	{
-//		productions.add(production);
-//	}
-//	public void rmProductions(Production production)
-//	{
-//		productions.remove(production);
-//	}
+
 	
 	public String getName() {
 		return name;
@@ -82,10 +56,6 @@ public  class Human implements Comparable<Human>{
 		return this.getID()+ " " + name + " " + surname;
 	}
 
-//	public Type getType() {
-//		return type;
-//	}
-	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -110,10 +80,6 @@ public  class Human implements Comparable<Human>{
 	@Override
 	public int compareTo(Human o)
     {
-		// podle prijmeni
-//		String s1 =  this.surname+this.name;
-//        String s2 =  o.surname+o.name;
-		// podle jmena
         String s1 =  this.name + this.surname;
         String s2 =  o.name  + o.surname;
         return s1.compareTo(s2);

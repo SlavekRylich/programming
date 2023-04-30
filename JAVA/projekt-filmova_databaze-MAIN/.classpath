@@ -6,7 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/skola/git/JAVA/projekt-filmova_databaze/sqlite/sqlite-jdbc-3.41.2.1.jar">
+	<classpathentry kind="lib" path="D:/skola/git/JAVA/projekt-filmova_databaze-MAIN/sqlite/sqlite-jdbc-3.41.2.1.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

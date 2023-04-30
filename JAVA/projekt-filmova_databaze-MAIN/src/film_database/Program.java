@@ -62,7 +62,7 @@ public class Program {
 		Database database = new Database();
 		
 		Connect connection = new Connect(database);
-		//pri prvnim spusteni se musi rucne zadata filmy a radne ukoncit aby se do databaze neco ulozilo
+
 		if (connection.connect())
 		{
 			connection.loadRecordsFromDatabase();
@@ -88,7 +88,7 @@ public class Program {
 			option=OnlyInt(sc);
 
 			switch (option) {
-			case 1: {						// "1. Pridat novy film"
+			case 1: {						
 				int op=0;
 				String name;
 				String directorName;
@@ -207,7 +207,7 @@ public class Program {
 					break;
 				}
 			
-			case 2: {												//"2. Upravit existujici film"
+			case 2: {												
 				Scanner scan = new Scanner(System.in);
 				Production change = FindProduct(scan,database);
 				if (change != null)
@@ -303,8 +303,8 @@ public class Program {
 					break;
 				}
 			
-			case 3: {																		//"3. Smazat film"
-				// to stejne vyladit hledani
+			case 3: {																		
+				
 				Scanner scan = new Scanner(System.in);
 				Production remove = FindProduct(scan, database);
 				if (remove !=null)
@@ -316,17 +316,17 @@ public class Program {
 				}
 				break;
 				}
-			case 4: {																		//"4.Vlozit hodnoceni"
+			case 4: {																		
 				Scanner scan = new Scanner(System.in);
 				InsertFeedback(scan, database);
 				break;
 			}
-			case 5: {																		//"5. Vypis filmu"
+			case 5: {																		
 				database.PrintAllDatabase();
 					
 				break;
 				}
-			case 6: {																		//"6. Vyhledat film"
+			case 6: {																		
 				Scanner scan = new Scanner(System.in);
 				Production product =  database.Find(scan, database);  					 
 				if (product != null)
@@ -341,7 +341,7 @@ public class Program {
 				else System.out.println("Nic nenalezeno");
 				break;
 				}
-			case 7: {																		//"7. Vypis hercu nebo animatoru ucinkujicich ve vice filmech"
+			case 7: {																		
 				
 				Map<Human, List<HumanRole>> map =  database.FindHumanInMultipleFilms();
 				for (Human item : map.keySet()) {
@@ -355,23 +355,23 @@ public class Program {
 				}
 				break;
 				}
-			case 8: {																		//"8. Vypis vsech filmu podle ucinkovani daneho herce nebo animatora"
+			case 8: {																		
 				database.FindHuman();
 				break;
 				}
-			case 9: {																		//"9. Ulozit film do souboru"
+			case 9: {																		
 				
 				database.SaveToFile();
 				
 				break;
 				}
-			case 10: {																		//"10. Nacteni filmu ze souboru"
+			case 10: {																		
 				
 				database.LoadFromFiles();
 				
 				break;
 				}
-			case 11: {																		//"11. Ukonceni programu"
+			case 11: {																		
 				
 				System.out.println();	
 				System.out.println("konec programu...");
@@ -380,7 +380,6 @@ public class Program {
 				connection.createTable();
 				connection.deleteSQLDatabase();
 				connection.insertRecords();
-				//database.selectAll();
 				connection.disconnect();
 				
 				
@@ -392,13 +391,13 @@ public class Program {
 				System.out.println("Zadejte prosim pouze z nabidky");
 				break;
 			
-			} // end of switch
+			} 
 			
-		} // end of while
+		} 
 		
 		
 		
-	} // end of main 
+	} 
 	
 	
 	public static Production FindProduct(Scanner scan,Database database)
@@ -445,4 +444,4 @@ public class Program {
 	
 	
 
-} // end of class Program 
+} 

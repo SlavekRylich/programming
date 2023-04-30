@@ -60,9 +60,6 @@ public class Connect
 		    		"name varchar(255) NOT NULL,"+"director varchar(255) NOT NULL,"+
 		           "year int,"+ "recomAge int,"+"performers varchar(255),"+
 		    		"feedback varchar(255)"+ ");";
-//	    String sql = "CREATE TABLE IF NOT EXISTS zamestnanci (" +
-//	           "id integer PRIMARY KEY," + "jmeno varchar(255) NOT NULL,"+
-//	    		"rodneCislo bigint, " + "popis varchar(50), " + "plat real" + ");";
 	    try
 	    {
 	            Statement stmt = conn.createStatement(); 
