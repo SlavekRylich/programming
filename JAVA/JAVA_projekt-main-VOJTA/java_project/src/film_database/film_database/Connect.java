@@ -10,6 +10,13 @@ import java.sql.Statement;
 public class Connect 
 {
 	private Connection conn; 
+	Database database = new Database();
+	
+	
+	
+	public Connect(Database database) {
+		this.database=database;
+	}
 	public boolean connect() 
 	{ 
        conn= null; 

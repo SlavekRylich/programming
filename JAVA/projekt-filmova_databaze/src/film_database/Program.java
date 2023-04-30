@@ -61,11 +61,12 @@ public class Program {
 		
 		Database database = new Database();
 		
+		Connect connection = new Connect(database);
 		//pri prvnim spusteni se musi rucne zadata filmy a radne ukoncit aby se do databaze neco ulozilo
-		if (database.connect())
+		if (connection.connect())
 		{
-			database.loadRecordsFromDatabase();
-			database.disconnect();
+			connection.loadRecordsFromDatabase();
+			connection.disconnect();
 		}
 		
 		Scanner sc = new Scanner(System.in);
@@ -141,7 +142,10 @@ public class Program {
 									int cnt = OnlyInt(scan); 
 									for (int i = 0; i < cnt; i++) {
 										System.out.println("Zadejte jmeno a prijmeni " + (i + 1) + ". herce:");
-										database.getProduction(ID).addActor(database.addHuman(scan.next(), scan.next()), database.getProduction(ID));
+										database.getProduction(ID).
+										addActor(database.addHuman(scan.next(),
+												scan.next()),
+												database.getProduction(ID));
 									}
 									run=true;
 									break;
@@ -175,7 +179,10 @@ public class Program {
 									int cnt = OnlyInt(scan);
 									for (int i = 0; i < cnt; i++) {
 										System.out.println("Zadejte jmeno a prijmeni " + (i+1) + ". animatora:");
-										database.getProduction(ID).addActor(database.addHuman(scan.next(), scan.next()), database.getProduction(ID));
+										database.getProduction(ID).
+										addActor(database.addHuman(scan.next(),
+												scan.next()),
+												database.getProduction(ID));
 									}
 									run=true;
 									break;
@@ -195,7 +202,8 @@ public class Program {
 					}
 
 					if (ID == -1) break;
-					database.getProduction(ID).setDirector(database.addHuman(directorName, directorSurname));
+					database.getProduction(ID).
+					setDirector(database.addHuman(directorName, directorSurname));
 					break;
 				}
 			
@@ -296,6 +304,7 @@ public class Program {
 				}
 			
 			case 3: {																		//"3. Smazat film"
+				// to stejne vyladit hledani
 				Scanner scan = new Scanner(System.in);
 				Production remove = FindProduct(scan, database);
 				if (remove !=null)
@@ -322,7 +331,9 @@ public class Program {
 				Production product =  database.Find(scan, database);  					 
 				if (product != null)
 				{
-					System.out.println("Nazev: " + product.getName()+ "\nReziser: "+product.getDirector()+"\nRok vydani: "+ product.getYearOfPublication());
+					System.out.println("Nazev: " + product.getName()+
+							"\nReziser: "+product.getDirector()+
+							"\nRok vydani: "+ product.getYearOfPublication());
 					product.SortFeedback();
 					product.PrintListActors();
 					product.PrintFeedback();
@@ -331,6 +342,7 @@ public class Program {
 				break;
 				}
 			case 7: {																		//"7. Vypis hercu nebo animatoru ucinkujicich ve vice filmech"
+				
 				Map<Human, List<HumanRole>> map =  database.FindHumanInMultipleFilms();
 				for (Human item : map.keySet()) {
 					int i = 0;
@@ -348,18 +360,13 @@ public class Program {
 				break;
 				}
 			case 9: {																		//"9. Ulozit film do souboru"
-				//Scanner scan = new Scanner(System.in);
-				//PrintProductions(pruductionsList); 
 				
 				database.SaveToFile();
-				//System.out.println("Zadejte nazev filmu, ktery chcete ulozit");
-				
-				//int select = Find(scan,pruductionsList);
-				//System.out.println(select);
 				
 				break;
 				}
 			case 10: {																		//"10. Nacteni filmu ze souboru"
+				
 				database.LoadFromFiles();
 				
 				break;
@@ -369,12 +376,12 @@ public class Program {
 				System.out.println();	
 				System.out.println("konec programu...");
 				
-				database.connect();
-				database.createTable();
-				database.deleteSQLDatabase();
-				database.insertRecords();
+				connection.connect();
+				connection.createTable();
+				connection.deleteSQLDatabase();
+				connection.insertRecords();
 				//database.selectAll();
-				database.disconnect();
+				connection.disconnect();
 				
 				
 				}

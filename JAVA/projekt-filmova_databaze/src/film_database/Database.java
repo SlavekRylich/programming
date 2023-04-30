@@ -40,7 +40,7 @@ public class Database implements Serializable{
 		setDatabaseHuman(new HashMap<Integer, Human>());
 	}
 
-	public HashMap<Integer, Production> getDatabaseItems() {
+	public HashMap<Integer, Production> getDatabaseFilms() {
 		return databaseFilms;
 	}
 
@@ -151,8 +151,10 @@ public class Database implements Serializable{
 	{
 		if (databaseFilms.size() != 0)
 		{
-		    System.out.println("     Typ     Nazev          Reziser             Rok vydani   Doporuceny vek");
-			for (Integer item: databaseFilms.keySet()) {
+	        System.out.println(String.format("%-9s%-20s%-20s%-20s%-20s",
+	        		"Typ", "Nazev", "Reziser", "Rok vydani", "Doporuceny vek"));
+			
+	        for (Integer item: databaseFilms.keySet()) {
 			    String toStr = item.toString();
 			    String name = databaseFilms.get(item).toString();
 			    String director = databaseFilms.get(item).getDirector();
@@ -161,12 +163,12 @@ public class Database implements Serializable{
 
 			    if (databaseFilms.get(item).getClass() == Anime.class)
 			    {
-			    	System.out.println(toStr + "    " + name + "       " + director + "             " + year + "          " + age);
+	                System.out.println(String.format("%-2s%-27s%-20s%-20s%-20s", toStr, name, director, year, age));
 				    System.out.print("Seznam animatoru: ");
 			    }
 			    else 
 			    {
-				    System.out.println(toStr + "    " + name + "         " + director + "             " + year);
+	                System.out.println(String.format("%-2s%-27s%-20s%-20s", toStr, name, director, year));
 				    System.out.print("Seznam hercu: ");
 			    }
 			    databaseFilms.get(item).PrintListActors();
@@ -177,6 +179,22 @@ public class Database implements Serializable{
 		else {
 			System.out.println("V databazi neni zadany zadny film");
 			return false;
+		}
+	}
+	
+	
+	// hledani filmu vyladit
+	public Production FindProductionByString()
+	{
+		Scanner scan = new Scanner(System.in);
+		if (PrintDatabaseIOnlyName())
+		{
+			System.out.println("Zadejte nazev filmu:");
+			return FindByName(scan.nextLine());
+		}
+		else
+		{
+			return null;
 		}
 	}
 	
@@ -597,231 +615,235 @@ public class Database implements Serializable{
 	
 	// --------------------databaze vojta
 
-	private Connection conn; 
-	public boolean connect() 
-	{ 
-       conn= null; 
-       try 
-       {
-              conn = DriverManager.getConnection("jdbc:sqlite:myDB.db");                       
-       } 
-       catch (SQLException e) 
-       { 
-            System.out.println(e.getMessage());
-            return false;
-       }
-       return true;
-	}
-	public void disconnect() 
-	{ 
-		if (conn != null) 
-		{
-	       
-			try 
-			{     
-				conn.close();  
-			} 
-		
-			catch (SQLException ex) 
-			{ 
-				System.out.println(ex.getMessage()); 
-			}
-		}
-	}
-	
-	public boolean createTable()
-	{
-	    if (conn==null)
-	           return false;
-	    String sql = "CREATE TABLE IF NOT EXISTS SQLDAtabase (" + "id integer PRIMARY KEY," +"type varchar(255) NOT NULL,"+ "name varchar(255) NOT NULL,"+"director varchar(255) NOT NULL,"+ "year int,"+ "recomAge int,"+"performers varchar(255),"+"feedback varchar(255)"+ ");";
-	    try
-	    {
-	            Statement stmt = conn.createStatement(); 
-	            stmt.execute(sql);
-	            return true;
-	    } 
-	    catch (SQLException e) 
-	    {
-	    	System.out.println(e.getMessage());
-	    }
-	    return false;
-	}
-	
-	public String getPerformers(Integer item)
-	{
-		String performers = "";
-			for (Human film : databaseFilms.get(item).getActors()) 
-			{
-				performers += new String( film.getFullName() + "," );
-			}
-		return performers;		
-	}
-	
-	public String getFeedback(Integer item)
-	{
-		String itemFeedback = "";
-			for (Feedback feedback : databaseFilms.get(item).getFeedback())
-			{
-				itemFeedback += new String(feedback.getNumber() + "-" + feedback.getComment()+",");
-			}
-		return itemFeedback;		
-	}
-	
-	public void insertRecords()
-	{
-		for (Integer item : databaseFilms.keySet()) 
-		{
-			
-			String sql = "INSERT INTO SQLDAtabase(type,name,director,year,recomAge,performers,feedback) VALUES(?,?,?,?,?,?,?)";
-			try 
-			{
-				PreparedStatement pstmt = conn.prepareStatement(sql); 
-				pstmt.setString(1, databaseFilms.get(item).getType());
-				pstmt.setString(2, databaseFilms.get(item).getName());
-				pstmt.setString(3, databaseFilms.get(item).getDirector());
-				pstmt.setInt(4, databaseFilms.get(item).getYearOfPublication());
-				if (databaseFilms.get(item).getClass() == Anime.class)
-				{
-					pstmt.setInt(5, databaseFilms.get(item).getAge());
-				}
-				else
-				{
-					pstmt.setInt(5, 0);
-				}
-				pstmt.setString(6, getPerformers(item));
-				pstmt.setString(7, getFeedback(item));
-				pstmt.executeUpdate();
-			} 
-			catch (SQLException e) 
-			{
-				System.out.println(e.getMessage());
-			}
-			
-		}
-	}
-	
-	
-	public void loadRecordsFromDatabase()
-	{
-        String sql = "SELECT id, type, name, director, year, recomAge, performers, feedback FROM SQLDAtabase";
-        try 
-        {
-             Statement stmt  = conn.createStatement();
-             ResultSet rs    = stmt.executeQuery(sql);
-             int ID = 0;
-             while (rs.next()) 
-             {            	
-              		String name;
-             		String director;
-      				String directorName;
-      				String directorSurname;
-      				String performers;
-      				short year;
-      				byte age;
-      				
-      				name = rs.getString("name");
-      				director = rs.getString("director");
-      				String[] parts = director.split(" ");
-      				directorName = parts[0];
-      				directorSurname = parts[1];
-      				year = rs.getShort("year");
-      				if(rs.getString("type").equals("Film"))
-      				{
-      					ID = addFilm(name, year);
-      				}
-      				else
-      				{
-      					age = rs.getByte("recomAge");
-      					ID = addAnime(name, year, age);
-      				}
-      					
-      				performers = rs.getString("performers");     				
-     				String[] parts2 = performers.split(",");     				
-      				
-      				for(int i = 0; i < parts2.length; i++)
-     				{
-     					String performer=parts2[i];
-     					String performerName;
-     					String performerSurname;
-     					String[] parts3 = performer.split(" ");
-     					performerName=parts3[0];
-     					performerSurname=parts3[1];     					    					     					
-     					getProduction(ID).addActor(addHuman(performerName, performerSurname), getProduction(ID));
-     				}
-      				getProduction(ID).setDirector(addHuman(directorName,directorSurname));
-      				
-      				Production insertFeedback = FindByName(rs.getString("name"));
-      				
-      				
-      				String evaluation;
-      				evaluation = rs.getString("feedback");
-      				String[] parts4 = evaluation.split(",");
-      				for(int i = 0; i < parts4.length; i++)
-     				{
-     					String evaluation2=parts4[i];
-     					byte number;
-          				String comment;
-     					String[] parts5 = evaluation2.split("-");
-     					try 
-     					{
-     					    number = Byte.parseByte(parts5[0]);
-     					    comment = parts5[1];
-     					    insertFeedback.setFeedback(number, comment);
-     					} catch (NumberFormatException e) 
-     					{
-     					   
-     					}
-     				}     				     			      				     				
-            	 }
-            		
-             
-        } 
-        catch (SQLException e) 
-        {
-            System.out.println(e.getMessage());
-        }
-	}
-	public void selectAll()
-	{
-		String sql = "SELECT id, type, name, director, year, recomAge, performers, feedback FROM SQLDAtabase";
-        try 
-        {
-             Statement stmt  = conn.createStatement();
-             ResultSet rs    = stmt.executeQuery(sql);
-             while (rs.next()) 
-             {
-            		 System.out.println(rs.getInt("id")+  "\t"   +
-                			rs.getString("type")+ "\t"+ 
-                			rs.getString("name") + "\t" + 
-                			rs.getString("director") + "\t" + 
-                			rs.getInt("year") + "\t" +                 			
-                			rs.getInt("recomAge") + "\t" + 
-                			rs.getString("performers") + "\t" + 
-                			rs.getString("feedback"));
-
-             }
-        } 
-        catch (SQLException e) 
-        {
-            System.out.println(e.getMessage());
-        }
-        
-	}
-	public void deleteSQLDatabase() 
-	{
-        String sql = "DELETE FROM SQLDAtabase";
-        
-        try 
-        {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.executeUpdate();
-
-        } 
-        catch (SQLException e) 
-        {
-            System.out.println(e.getMessage());
-        }
-    }
+//	private Connection conn; 
+//	public boolean connect() 
+//	{ 
+//       conn= null; 
+//       try 
+//       {
+//              conn = DriverManager.getConnection("jdbc:sqlite:myDB.db");                       
+//       } 
+//       catch (SQLException e) 
+//       { 
+//            System.out.println(e.getMessage());
+//            return false;
+//       }
+//       return true;
+//	}
+//	public void disconnect() 
+//	{ 
+//		if (conn != null) 
+//		{
+//	       
+//			try 
+//			{     
+//				conn.close();  
+//			} 
+//		
+//			catch (SQLException ex) 
+//			{ 
+//				System.out.println(ex.getMessage()); 
+//			}
+//		}
+//	}
+//	
+//	public boolean createTable()
+//	{
+//	    if (conn==null)
+//	           return false;
+//	    String sql = "CREATE TABLE IF NOT EXISTS SQLDAtabase (" +
+//	           "id integer PRIMARY KEY," +"type varchar(255) NOT NULL,"+
+//	    		"name varchar(255) NOT NULL,"+"director varchar(255) NOT NULL,"+
+//	           "year int,"+ "recomAge int,"+"performers varchar(255),"+
+//	    		"feedback varchar(255)"+ ");";
+//	    try
+//	    {
+//	            Statement stmt = conn.createStatement(); 
+//	            stmt.execute(sql);
+//	            return true;
+//	    } 
+//	    catch (SQLException e) 
+//	    {
+//	    	System.out.println(e.getMessage());
+//	    }
+//	    return false;
+//	}
+//	
+//	public String getPerformers(Integer item)
+//	{
+//		String performers = "";
+//			for (Human film : databaseFilms.get(item).getActors()) 
+//			{
+//				performers += new String( film.getFullName() + "," );
+//			}
+//		return performers;		
+//	}
+//	
+//	public String getFeedback(Integer item)
+//	{
+//		String itemFeedback = "";
+//			for (Feedback feedback : databaseFilms.get(item).getFeedback())
+//			{
+//				itemFeedback += new String(feedback.getNumber() + "-" + feedback.getComment()+",");
+//			}
+//		return itemFeedback;		
+//	}
+//	
+//	public void insertRecords()
+//	{
+//		for (Integer item : databaseFilms.keySet()) 
+//		{
+//			
+//			String sql = "INSERT INTO SQLDAtabase(type,name,director,year,recomAge,performers,feedback) VALUES(?,?,?,?,?,?,?)";
+//			try 
+//			{
+//				PreparedStatement pstmt = conn.prepareStatement(sql); 
+//				pstmt.setString(1, databaseFilms.get(item).getType());
+//				pstmt.setString(2, databaseFilms.get(item).getName());
+//				pstmt.setString(3, databaseFilms.get(item).getDirector());
+//				pstmt.setInt(4, databaseFilms.get(item).getYearOfPublication());
+//				if (databaseFilms.get(item).getClass() == Anime.class)
+//				{
+//					pstmt.setInt(5, databaseFilms.get(item).getAge());
+//				}
+//				else
+//				{
+//					pstmt.setInt(5, 0);
+//				}
+//				pstmt.setString(6, getPerformers(item));
+//				pstmt.setString(7, getFeedback(item));
+//				pstmt.executeUpdate();
+//			} 
+//			catch (SQLException e) 
+//			{
+//				System.out.println(e.getMessage());
+//			}
+//			
+//		}
+//	}
+//	
+//	
+//	public void loadRecordsFromDatabase()
+//	{
+//        String sql = "SELECT id, type, name, director, year, recomAge, performers, feedback FROM SQLDAtabase";
+//        try 
+//        {
+//             Statement stmt  = conn.createStatement();
+//             ResultSet rs    = stmt.executeQuery(sql);
+//             int ID = 0;
+//             while (rs.next()) 
+//             {            	
+//              		String name;
+//             		String director;
+//      				String directorName;
+//      				String directorSurname;
+//      				String performers;
+//      				short year;
+//      				byte age;
+//      				
+//      				name = rs.getString("name");
+//      				director = rs.getString("director");
+//      				String[] parts = director.split(" ");
+//      				directorName = parts[0];
+//      				directorSurname = parts[1];
+//      				year = rs.getShort("year");
+//      				if(rs.getString("type").equals("Film"))
+//      				{
+//      					ID = addFilm(name, year);
+//      				}
+//      				else
+//      				{
+//      					age = rs.getByte("recomAge");
+//      					ID = addAnime(name, year, age);
+//      				}
+//      					
+//      				performers = rs.getString("performers");     				
+//     				String[] parts2 = performers.split(",");     				
+//      				
+//      				for(int i = 0; i < parts2.length; i++)
+//     				{
+//     					String performer=parts2[i];
+//     					String performerName;
+//     					String performerSurname;
+//     					String[] parts3 = performer.split(" ");
+//     					performerName=parts3[0];
+//     					performerSurname=parts3[1];     					    					     					
+//     					getProduction(ID).addActor(addHuman(performerName, performerSurname), getProduction(ID));
+//     				}
+//      				getProduction(ID).setDirector(addHuman(directorName,directorSurname));
+//      				
+//      				Production insertFeedback = FindByName(rs.getString("name"));
+//      				
+//      				
+//      				String evaluation;
+//      				evaluation = rs.getString("feedback");
+//      				String[] parts4 = evaluation.split(",");
+//      				for(int i = 0; i < parts4.length; i++)
+//     				{
+//     					String evaluation2=parts4[i];
+//     					byte number;
+//          				String comment;
+//     					String[] parts5 = evaluation2.split("-");
+//     					try 
+//     					{
+//     					    number = Byte.parseByte(parts5[0]);
+//     					    comment = parts5[1];
+//     					    insertFeedback.setFeedback(number, comment);
+//     					} catch (NumberFormatException e) 
+//     					{
+//     					   
+//     					}
+//     				}     				     			      				     				
+//            	 }
+//            		
+//             
+//        } 
+//        catch (SQLException e) 
+//        {
+//            System.out.println(e.getMessage());
+//        }
+//	}
+//	public void selectAll()
+//	{
+//		String sql = "SELECT id, type, name, director, year, recomAge, performers, feedback FROM SQLDAtabase";
+//        try 
+//        {
+//             Statement stmt  = conn.createStatement();
+//             ResultSet rs    = stmt.executeQuery(sql);
+//             while (rs.next()) 
+//             {
+//            		 System.out.println(rs.getInt("id")+  "\t"   +
+//                			rs.getString("type")+ "\t"+ 
+//                			rs.getString("name") + "\t" + 
+//                			rs.getString("director") + "\t" + 
+//                			rs.getInt("year") + "\t" +                 			
+//                			rs.getInt("recomAge") + "\t" + 
+//                			rs.getString("performers") + "\t" + 
+//                			rs.getString("feedback"));
+//
+//             }
+//        } 
+//        catch (SQLException e) 
+//        {
+//            System.out.println(e.getMessage());
+//        }
+//        
+//	}
+//	public void deleteSQLDatabase() 
+//	{
+//        String sql = "DELETE FROM SQLDAtabase";
+//        
+//        try 
+//        {
+//            PreparedStatement pstmt = conn.prepareStatement(sql);
+//            pstmt.executeUpdate();
+//
+//        } 
+//        catch (SQLException e) 
+//        {
+//            System.out.println(e.getMessage());
+//        }
+//    }
 
 	
 	// -------------------------------------konec databaze
