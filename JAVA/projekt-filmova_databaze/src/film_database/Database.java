@@ -7,6 +7,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -194,7 +200,7 @@ public class Database implements Serializable{
 			Scanner sc = new Scanner(System.in);
 			System.out.println("Zadejte vyraz:");
 			
-			int count=0;
+			int numberMatches=0;
 			String name = null;
 			String string = sc.nextLine();
 			System.out.println("Nalezeno:");
@@ -203,63 +209,74 @@ public class Database implements Serializable{
 				int condition= (name.indexOf(string));
 				if ( condition > -1)
 				{
-				    count++;
+				    numberMatches++;
 				    System.out.println("- " +name);
 				}
 				
 			}
-			if (count != 0) 
+			if (numberMatches != 0) 
 				{
 					System.out.println("Zadejte osobu:");
-					 FindProductionsByHuman(sc.nextLine());
-					 return;
+					String findHuman = sc.nextLine();
+					
+					Human human= null;
+					int count = 0;
+					
+					for (Integer key : databaseHuman.keySet()) 
+					{
+						name = databaseHuman.get(key).getFullName();
+						
+						if (name.equals(findHuman))
+						{
+							human = databaseHuman.get(key);
+						}
+						
+					}
+					
+					if (human == null) 
+						{
+						System.out.println("Zadali jste spatne osobu");
+						return;
+						}
+					
+					
+						for (Iterator<HumanRole> iterator = HumanRole.instances.iterator(); iterator.hasNext();) {
+						    HumanRole value = iterator.next();
+						     name = value.getHuman().getFullName();
+						   
+							    if (name.equals(findHuman))
+							    {
+								    System.out.println(value.getProduction().getName() + " - " + value.printRole());
+								    count++;
+								}
+						}
+				
+						
+						if (count<1) {
+							System.out.println(human.getFullName() +" se nepodili na zadnem filmu");
+						}
+						return;
 				}
-			 
-			return ;
-	
+			else
+			{
+				System.out.println("Nenalezen zadny zaznam");
+				return;
+			}
+			
 		}
 		else {
 			System.out.println("V databazi neni zadana zadna osoba");
 			return;
 		}
 	}
+	
 	public void FindProductionsByHuman(String findHuman)
 	{
 		if (databaseHuman.size() != 0)
 		{
-			Human human= null;
-			int humanId = 0; 
-			
-			for (Integer key : databaseHuman.keySet()) {
-				String name = databaseHuman.get(key).getFullName();
-				if (name.equals(findHuman))
-				{
-					human = databaseHuman.get(key);
-					humanId = human.getID();
-				}
-				
-			}
-			
-			if (HumanRole.instances.contains(HumanRole.instances.get(humanId)))) 
-			{
-				for (Iterator<HumanRole> iterator = HumanRole.instances.iterator(); iterator.hasNext(); ) {
-				    HumanRole value = iterator.next();
-				    String name = value.getHuman().getFullName();
-				   
-				    if (name.equals(findHuman))
-				    {
-					    System.out.println(value.getProduction().getName() + " - " + value.printRole());
-					    }
-				    }
-				return;
-			}
-			else 
-			{
-				System.out.println(human.getFullName() +" se nepodili na zadnem filmu");
-				return;
-			}
 		}
-		else {
+		else 
+		{
 			System.out.println("V databazi neni zadana zadna osoba");
 			return;
 		}
@@ -445,10 +462,11 @@ public class Database implements Serializable{
 		
 		if (directory.exists())
 		{
+			FileReader fr = null; BufferedReader in = null;
 			
-			for (File file : directory.listFiles()) {
+			try {
 				
-				FileReader fr = null; BufferedReader in = null;
+			for (File file : directory.listFiles()) {
 				String oddelovac ="[ :] " ;
 				String radek;
 				String [] castiTextu;
@@ -496,6 +514,7 @@ public class Database implements Serializable{
 				if (type.equalsIgnoreCase("Film"))
 				{
 					idx = addFilm(name, year);
+					
 				}
 				
 				else 
@@ -518,7 +537,6 @@ public class Database implements Serializable{
 				String splitActors = ",";			//  brad pitt, tom hanks, ade adel, 
 				String splitNames = " ";			//brad pitt 
 				
-				//if ()              // dodelat, kdyt nejsou zadani herci (jakoze nemusi) tak aby to fungovalo i takto
 				if (castiTextu.length > 1)
 				{
 					for (String s : castiTextu[1].split(splitActors))
@@ -545,6 +563,13 @@ public class Database implements Serializable{
 					fr.close();
 			}
 			
+			} catch (NullPointerException e) {
+				
+			}
+			finally {
+				in.close(); 
+				fr.close();
+			}
 		}
 		else 
 		{
@@ -569,5 +594,238 @@ public class Database implements Serializable{
 	public void setDatabaseHuman(HashMap<Integer, Human> databaseHuman) {
 		this.databaseHuman = databaseHuman;
 	}
+	
+	// --------------------databaze vojta
+
+	private Connection conn; 
+	public boolean connect() 
+	{ 
+       conn= null; 
+       try 
+       {
+              conn = DriverManager.getConnection("jdbc:sqlite:myDB.db");                       
+       } 
+       catch (SQLException e) 
+       { 
+            System.out.println(e.getMessage());
+            return false;
+       }
+       return true;
+	}
+	public void disconnect() 
+	{ 
+		if (conn != null) 
+		{
+	       
+			try 
+			{     
+				conn.close();  
+			} 
+		
+			catch (SQLException ex) 
+			{ 
+				System.out.println(ex.getMessage()); 
+			}
+		}
+	}
+	
+	public boolean createTable()
+	{
+	    if (conn==null)
+	           return false;
+	    String sql = "CREATE TABLE IF NOT EXISTS SQLDAtabase (" + "id integer PRIMARY KEY," +"type varchar(255) NOT NULL,"+ "name varchar(255) NOT NULL,"+"director varchar(255) NOT NULL,"+ "year int,"+ "recomAge int,"+"performers varchar(255),"+"feedback varchar(255)"+ ");";
+	    try
+	    {
+	            Statement stmt = conn.createStatement(); 
+	            stmt.execute(sql);
+	            return true;
+	    } 
+	    catch (SQLException e) 
+	    {
+	    	System.out.println(e.getMessage());
+	    }
+	    return false;
+	}
+	
+	public String getPerformers(Integer item)
+	{
+		String performers = "";
+			for (Human film : databaseFilms.get(item).getActors()) 
+			{
+				performers += new String( film.getFullName() + "," );
+			}
+		return performers;		
+	}
+	
+	public String getFeedback(Integer item)
+	{
+		String itemFeedback = "";
+			for (Feedback feedback : databaseFilms.get(item).getFeedback())
+			{
+				itemFeedback += new String(feedback.getNumber() + "-" + feedback.getComment()+",");
+			}
+		return itemFeedback;		
+	}
+	
+	public void insertRecords()
+	{
+		for (Integer item : databaseFilms.keySet()) 
+		{
+			
+			String sql = "INSERT INTO SQLDAtabase(type,name,director,year,recomAge,performers,feedback) VALUES(?,?,?,?,?,?,?)";
+			try 
+			{
+				PreparedStatement pstmt = conn.prepareStatement(sql); 
+				pstmt.setString(1, databaseFilms.get(item).getType());
+				pstmt.setString(2, databaseFilms.get(item).getName());
+				pstmt.setString(3, databaseFilms.get(item).getDirector());
+				pstmt.setInt(4, databaseFilms.get(item).getYearOfPublication());
+				if (databaseFilms.get(item).getClass() == Anime.class)
+				{
+					pstmt.setInt(5, databaseFilms.get(item).getAge());
+				}
+				else
+				{
+					pstmt.setInt(5, 0);
+				}
+				pstmt.setString(6, getPerformers(item));
+				pstmt.setString(7, getFeedback(item));
+				pstmt.executeUpdate();
+			} 
+			catch (SQLException e) 
+			{
+				System.out.println(e.getMessage());
+			}
+			
+		}
+	}
+	
+	
+	public void loadRecordsFromDatabase()
+	{
+        String sql = "SELECT id, type, name, director, year, recomAge, performers, feedback FROM SQLDAtabase";
+        try 
+        {
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql);
+             int ID = 0;
+             while (rs.next()) 
+             {            	
+              		String name;
+             		String director;
+      				String directorName;
+      				String directorSurname;
+      				String performers;
+      				short year;
+      				byte age;
+      				
+      				name = rs.getString("name");
+      				director = rs.getString("director");
+      				String[] parts = director.split(" ");
+      				directorName = parts[0];
+      				directorSurname = parts[1];
+      				year = rs.getShort("year");
+      				if(rs.getString("type").equals("Film"))
+      				{
+      					ID = addFilm(name, year);
+      				}
+      				else
+      				{
+      					age = rs.getByte("recomAge");
+      					ID = addAnime(name, year, age);
+      				}
+      					
+      				performers = rs.getString("performers");     				
+     				String[] parts2 = performers.split(",");     				
+      				
+      				for(int i = 0; i < parts2.length; i++)
+     				{
+     					String performer=parts2[i];
+     					String performerName;
+     					String performerSurname;
+     					String[] parts3 = performer.split(" ");
+     					performerName=parts3[0];
+     					performerSurname=parts3[1];     					    					     					
+     					getProduction(ID).addActor(addHuman(performerName, performerSurname), getProduction(ID));
+     				}
+      				getProduction(ID).setDirector(addHuman(directorName,directorSurname));
+      				
+      				Production insertFeedback = FindByName(rs.getString("name"));
+      				
+      				
+      				String evaluation;
+      				evaluation = rs.getString("feedback");
+      				String[] parts4 = evaluation.split(",");
+      				for(int i = 0; i < parts4.length; i++)
+     				{
+     					String evaluation2=parts4[i];
+     					byte number;
+          				String comment;
+     					String[] parts5 = evaluation2.split("-");
+     					try 
+     					{
+     					    number = Byte.parseByte(parts5[0]);
+     					    comment = parts5[1];
+     					    insertFeedback.setFeedback(number, comment);
+     					} catch (NumberFormatException e) 
+     					{
+     					   
+     					}
+     				}     				     			      				     				
+            	 }
+            		
+             
+        } 
+        catch (SQLException e) 
+        {
+            System.out.println(e.getMessage());
+        }
+	}
+	public void selectAll()
+	{
+		String sql = "SELECT id, type, name, director, year, recomAge, performers, feedback FROM SQLDAtabase";
+        try 
+        {
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql);
+             while (rs.next()) 
+             {
+            		 System.out.println(rs.getInt("id")+  "\t"   +
+                			rs.getString("type")+ "\t"+ 
+                			rs.getString("name") + "\t" + 
+                			rs.getString("director") + "\t" + 
+                			rs.getInt("year") + "\t" +                 			
+                			rs.getInt("recomAge") + "\t" + 
+                			rs.getString("performers") + "\t" + 
+                			rs.getString("feedback"));
+
+             }
+        } 
+        catch (SQLException e) 
+        {
+            System.out.println(e.getMessage());
+        }
+        
+	}
+	public void deleteSQLDatabase() 
+	{
+        String sql = "DELETE FROM SQLDAtabase";
+        
+        try 
+        {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.executeUpdate();
+
+        } 
+        catch (SQLException e) 
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
+	
+	// -------------------------------------konec databaze
+	
+	
 	
 }  // end of database class

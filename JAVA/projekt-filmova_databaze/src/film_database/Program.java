@@ -1,11 +1,9 @@
 package film_database;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Program {
 	
@@ -63,6 +61,12 @@ public class Program {
 		
 		Database database = new Database();
 		
+		//pri prvnim spusteni se musi rucne zadata filmy a radne ukoncit aby se do databaze neco ulozilo
+		if (database.connect())
+		{
+			database.loadRecordsFromDatabase();
+			database.disconnect();
+		}
 		
 		Scanner sc = new Scanner(System.in);
 		int option=0;
@@ -113,6 +117,7 @@ public class Program {
 					directorSurname= scan.next();
 					System.out.println("Zadejte rok vydani:");
 					year = OnlyShort(scan);
+					
 					
 					switch(op) {
 						case 1:
@@ -363,6 +368,15 @@ public class Program {
 				
 				System.out.println();	
 				System.out.println("konec programu...");
+				
+				database.connect();
+				database.createTable();
+				database.deleteSQLDatabase();
+				database.insertRecords();
+				//database.selectAll();
+				database.disconnect();
+				
+				
 				}
 				end = true;
 				break;
