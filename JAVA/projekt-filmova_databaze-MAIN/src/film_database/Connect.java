@@ -168,13 +168,17 @@ public class Connect
      					String performerName;
      					String performerSurname;
      					String[] parts3 = performer.split(" ");
-     					performerName=parts3[0];
-     					performerSurname=parts3[1];     					    					     					
-     					database.getProduction(ID).addActor(database.addHuman(performerName, performerSurname), database.getProduction(ID));
+     					if (parts3.length >1)
+     					{
+	     					performerName=parts3[0];
+	     					performerSurname=parts3[1];
+	     					
+	     					database.getProduction(ID).addActor(database.addHuman(performerName, performerSurname), database.getProduction(ID));
+     					}
      				}
       				database.getProduction(ID).setDirector(database.addHuman(directorName,directorSurname));
       				
-      				Production insertFeedback = database.FindByName(rs.getString("name"));
+      				Production insertFeedback = database.getProductionByName(rs.getString("name"));
       				
       				
       				String evaluation;

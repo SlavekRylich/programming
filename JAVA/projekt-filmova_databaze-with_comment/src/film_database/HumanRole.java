@@ -23,7 +23,6 @@ public class HumanRole {
 	{
 		instances.add(ID, this);
 		ID = count.incrementAndGet();
-		
 		this.setProduction(production);
 		this.setHuman(human);
 		this.role=role;
@@ -64,9 +63,11 @@ public class HumanRole {
 	public int getID() {
 		return ID;
 	}
+	
 	public ArrayList<HumanRole> getInstances() {
 		return instances;
 	}
+	
 
 	@Override
 	public String toString() {

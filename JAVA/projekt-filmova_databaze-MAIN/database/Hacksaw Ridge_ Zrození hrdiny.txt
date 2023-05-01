@@ -1,0 +1,7 @@
+ID; 5 
+Typ; Film 
+Nazev; Hacksaw Ridge: Zrození hrdiny
+Reziser; Robert Schenkkan
+Rok; 2016
+Ucinkujici; Teresa Palmer, Luke Bracey, Sam Worthington, Vince Vaughn, Andrew Garfield, 
+Hodnoceni; 

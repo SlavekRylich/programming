@@ -33,9 +33,9 @@ public class Anime extends Production {
 	
 	@Override
 	public Human addActor(Human human, Production production) {
-		new HumanRole(production, human, HumanRole.Role.Animator);
+		super.UniquenessHumanRole(human, production, HumanRole.Role.Animator);
 		return human;	
-		}
+	}
 
 	@Override
 	public String getType() {

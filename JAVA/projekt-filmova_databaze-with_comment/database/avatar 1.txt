@@ -1,9 +1,0 @@
-ID: 1 
-Typ: Film 
-Nazev: avatar 1
-Reziser: james cameron
-Rok: 2009
-Ucinkujici: brad pitt, tom hanks, ade adel, 
-Hodnoceni: 
-1 - moc sa nepodarilo
-5 - nejvic dobrej

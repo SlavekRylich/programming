@@ -1,0 +1,7 @@
+ID; 2 
+Typ; Film 
+Nazev; Avatar: The Way of Water
+Reziser; James Cameron
+Rok; 2023
+Ucinkujici; Zoe Saldana, Stephen Lang, Sigourney Weaver, Sam Worthington, Kate Winslet, 
+Hodnoceni; 

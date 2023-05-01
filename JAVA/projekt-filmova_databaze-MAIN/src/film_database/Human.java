@@ -10,8 +10,7 @@ public  class Human implements Comparable<Human>{
 	private String name;
 	private String surname;
 	public static List<Human> instances = new ArrayList<>();
-
-
+	
 	
 	public Human(String name, String surname) {		
 		instances.add(ID,this);
@@ -19,7 +18,6 @@ public  class Human implements Comparable<Human>{
 		this.setName(name);
 		this.setSurname(surname);	
 	}
-
 
 	
 	public String getName() {
@@ -55,7 +53,6 @@ public  class Human implements Comparable<Human>{
 	{
 		return this.getID()+ " " + name + " " + surname;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {

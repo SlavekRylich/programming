@@ -1,0 +1,7 @@
+ID; 6 
+Typ; Film 
+Nazev; Gran Torino
+Reziser; Clint Eastwood
+Rok; 2008
+Ucinkujici; Christopher Carley, Ahney Her, Bee Vang, Clint Eastwood, 
+Hodnoceni; 

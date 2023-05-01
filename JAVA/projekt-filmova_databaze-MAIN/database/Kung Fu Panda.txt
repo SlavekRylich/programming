@@ -1,0 +1,11 @@
+ID; 3 
+Typ; Anime 
+Nazev; Kung Fu Panda
+Reziser; John Stevenson
+Rok; 2008
+Doporuceny vek; 4
+Ucinkujici; Angelina Jolie, Dustin Hoffman, Ian McShane, Jack Black, Lucy Liu, Seth Rogen, 
+Hodnoceni; 
+10 - Oscar 1 nominace: Nejlepší animovaný film
+7 - Dobre
+4 - Vèera pøišla Kung Fu panda - to byla ale na základce švanda !

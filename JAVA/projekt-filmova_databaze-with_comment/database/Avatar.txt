@@ -1,0 +1,8 @@
+ID; 1 
+Typ; Film 
+Nazev; Avatar
+Reziser; James Cameron
+Rok; 2009
+Ucinkujici; Zoe Saldana, Stephen Lang, Sam Worthington, Michelle Rodriguez, Giovanni Ribisi, 
+Hodnoceni; 
+5 - Nejlepsi film ever
